@@ -16,10 +16,15 @@ class CreateAdminTables extends Migration
 
         Schema::connection($connection)->create(config('admin.database.users_table'), function (Blueprint $table) {
             $table->increments('id');
-            $table->string('username', 190)->unique();
+            $table->string('username', 190);
             $table->string('password', 60);
             $table->string('name');
+            $table->unsignedInteger('brand_id');
+            $table->unsignedInteger('category_id');
             $table->string('avatar')->nullable();
+            $table->string('province');
+            $table->string('city');
+            $table->string('district');
             $table->string('remember_token', 100)->nullable();
             $table->timestamps();
         });

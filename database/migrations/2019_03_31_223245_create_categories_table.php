@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProductSkusTable extends Migration
+class CreateCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,10 @@ class CreateProductSkusTable extends Migration
      */
     public function up()
     {
-        Schema::create('product_skus', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
-            $table->string('description');
-            $table->decimal('price', 10, 2);
-            $table->unsignedInteger('stock');
-            $table->unsignedInteger('product_id');
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->text('summary');
             $table->timestamps();
         });
     }
@@ -32,6 +28,6 @@ class CreateProductSkusTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_skus');
+        Schema::dropIfExists('categories');
     }
 }
