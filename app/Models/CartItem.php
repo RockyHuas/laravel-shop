@@ -6,16 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class CartItem extends Model
 {
-    protected $fillable = ['amount'];
+    protected $guarded=['id'];
     public $timestamps = false;
 
+    // 所属的用户
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function productSku()
+    // 所属的产品
+    public function product()
     {
-        return $this->belongsTo(ProductSku::class);
+        return $this->belongsTo(Product::class);
     }
 }

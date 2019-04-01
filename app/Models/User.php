@@ -14,9 +14,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'email', 'password', 'email_verified',
-    ];
+   protected $guarded=['id'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -31,11 +29,13 @@ class User extends Authenticatable
         'email_verified' => 'boolean',
     ];
 
+    // 用户地址
     public function addresses()
     {
         return $this->hasMany(UserAddress::class);
     }
 
+    // 购物车详情
     public function cartItems()
     {
         return $this->hasMany(CartItem::class);
