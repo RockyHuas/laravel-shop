@@ -19,12 +19,12 @@ class CreateAdminTables extends Migration
             $table->string('username', 190);
             $table->string('password', 60);
             $table->string('name');
-            $table->unsignedInteger('brand_id');
-            $table->unsignedInteger('category_id');
+            $table->unsignedInteger('brand_id')->default(0);
+            $table->unsignedInteger('category_id')->default(0);
             $table->string('avatar')->nullable();
-            $table->string('province');
-            $table->string('city');
-            $table->string('district');
+            $table->string('province')->nullable();
+            $table->string('city')->nullable();
+            $table->string('district')->nullable();
             $table->string('remember_token', 100)->nullable();
             $table->timestamps();
         });

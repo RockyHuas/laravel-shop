@@ -15,7 +15,7 @@ return [
     /*
      * 页面顶部小 Logo
      */
-    'logo-mini' => '<b>LS</b>',
+    'logo-mini' => '<b>后台管理系统</b>',
 
     /*
      * 路由配置

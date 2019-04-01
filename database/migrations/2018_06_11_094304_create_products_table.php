@@ -19,11 +19,11 @@ class CreateProductsTable extends Migration
             $table->text('description');
             $table->text('app_description');
             $table->string('image');
-            $table->string('povince');
-            $table->string('city');
-            $table->string('district');
-            $table->unsignedInteger('sort')->default(0);
             $table->string('app_image');
+            $table->string('povince')->nullable();
+            $table->string('city')->nullable();
+            $table->string('district')->nullable();
+            $table->unsignedInteger('sort')->default(0);
             $table->boolean('on_sale')->default(true);
             $table->float('rating')->default(5);
             $table->unsignedInteger('sold_count')->default(0);
