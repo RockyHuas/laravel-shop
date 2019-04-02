@@ -24,6 +24,7 @@ class CreateProductsTable extends Migration
             $table->string('city')->nullable();
             $table->string('district')->nullable();
             $table->unsignedInteger('sort')->default(0);
+            $table->unsignedInteger('stock')->default(100);
             $table->boolean('on_sale')->default(true);
             $table->float('rating')->default(5);
             $table->unsignedInteger('sold_count')->default(0);
