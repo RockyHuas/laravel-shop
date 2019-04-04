@@ -10,6 +10,13 @@ Route::group([
     'middleware'    => config('admin.route.middleware'),
 ], function (Router $router) {
     $router->get('/', 'HomeController@index');
+    // 省份
+    $router->get('area/province', 'AreaController@province');
+    // 城市
+    $router->get('area/city', 'AreaController@city');
+    // 地区
+    $router->get('area/district', 'AreaController@district');
+    $router->get('area/province', 'AreaController@province');
     $router->get('users', 'UsersController@index');
     $router->get('products', 'ProductsController@index');
     $router->get('products/create', 'ProductsController@create');
@@ -20,10 +27,10 @@ Route::group([
     $router->get('orders/{order}', 'OrdersController@show')->name('admin.orders.show');
     $router->post('orders/{order}/ship', 'OrdersController@ship')->name('admin.orders.ship');
     $router->post('orders/{order}/refund', 'OrdersController@handleRefund')->name('admin.orders.handle_refund');
-    $router->get('coupon_codes', 'CouponCodesController@index');
-    $router->post('coupon_codes', 'CouponCodesController@store');
-    $router->get('coupon_codes/create', 'CouponCodesController@create');
-    $router->get('coupon_codes/{id}/edit', 'CouponCodesController@edit');
-    $router->put('coupon_codes/{id}', 'CouponCodesController@update');
-    $router->delete('coupon_codes/{id}', 'CouponCodesController@destroy');
+//    $router->get('coupon_codes', 'CouponCodesController@index');
+//    $router->post('coupon_codes', 'CouponCodesController@store');
+//    $router->get('coupon_codes/create', 'CouponCodesController@create');
+//    $router->get('coupon_codes/{id}/edit', 'CouponCodesController@edit');
+//    $router->put('coupon_codes/{id}', 'CouponCodesController@update');
+//    $router->delete('coupon_codes/{id}', 'CouponCodesController@destroy');
 });
