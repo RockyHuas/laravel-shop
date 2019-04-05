@@ -70,7 +70,7 @@ class ProductsController extends Controller
         return Admin::grid(Product::class, function (Grid $grid) {
             $grid->id('ID')->sortable();
             $grid->title('商品名称')->editable('textarea');
-            $grid->image('商品名称')->image(\Storage::disk('public')->url('/'), 50, 50);
+            $grid->image('商品图片')->image(\Storage::disk('public')->url('/'), 50, 50);
 
             $grid->price('价格')->editable('textarea');;
             $grid->stock('剩余库存')->editable('textarea');
@@ -108,14 +108,6 @@ class ProductsController extends Controller
                 $tools->disableDelete();
                 // 去掉`查看`按钮
                 $tools->disableView();
-            });
-            $form->footer(function ($footer) {
-                // 去掉`查看`checkbox
-//                $footer->disableViewCheck();
-                // 去掉`继续编辑`checkbox
-//                $footer->disableEditingCheck();
-                // 去掉`继续创建`checkbox
-//                $footer->disableCreatingCheck();
             });
 
             $form->tab('商品基本信息', function ($form) {

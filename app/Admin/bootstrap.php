@@ -17,7 +17,11 @@
  * Admin::js('/packages/prettydocs/js/main.js');
  *
  */
+use App\Admin\Extensions\WangEditor;
+use Encore\Admin\Form;
 
 Encore\Admin\Form::forget(['map']);
 
 app('view')->prependNamespace('admin', resource_path('views/admin'));
+
+Form::extend('editor', WangEditor::class);

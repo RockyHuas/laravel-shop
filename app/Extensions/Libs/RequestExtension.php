@@ -58,12 +58,13 @@ final class RequestExtension
 
     public function get(array $arguments)
     {
+        $controller=array_shift($arguments);
         //解析
         $configs = $this->expalinConfigs($arguments);
 
         //验证参数的合法性
         $validate_rules = $this->coverToValidatorRules($configs);
-        $data = $this->request->validate($validate_rules, $this->request->messages());
+        $data = $controller->validate( $this->request,$validate_rules, $this->request->messages());
 
 
         //获取参数的默认值

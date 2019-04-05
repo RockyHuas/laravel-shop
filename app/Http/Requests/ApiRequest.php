@@ -18,5 +18,6 @@ class ApiRequest extends BaseRequest
         'password' => 'required|string|min:6',
         'real_name' => 'required|string',
         'gender' => 'nullable|integer|in:0,1,2',
+        'image' => 'required',
     ];
 }
