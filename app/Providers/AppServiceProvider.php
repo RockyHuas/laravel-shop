@@ -22,25 +22,25 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        app('Dingo\Api\Exception\Handler')->register(function (Exception $exception) {
-            return (new Handler($this->app))->render(request(), $exception);
-        });
+//        app('Dingo\Api\Exception\Handler')->register(function (Exception $exception) {
+//            return (new Handler($this->app))->render(request(), $exception);
+//        });
 
-        // 请求参数
-        Request::macro('fields', function (array $arguments, bool $remove_keys = false) {
-            static $request_extend;
-            if (!$request_extend) {
-                $request_extend = new RequestExtension($this);
-            }
-            $result = $request_extend->get($arguments);
-            return !$remove_keys ? $result : array_values($result);
-        });
-
-        // 自定义分布，将分布属性 data 改为 items
-        $this->app->bind(LengthAwarePaginator::class, function ($_, $arguments) {
-            extract($arguments);
-            return new TchLengthAwarePaginator($items, $total, $perPage, $currentPage, $options);
-        });
+//        // 请求参数
+//        Request::macro('fields', function (array $arguments, bool $remove_keys = false) {
+//            static $request_extend;
+//            if (!$request_extend) {
+//                $request_extend = new RequestExtension($this);
+//            }
+//            $result = $request_extend->get($arguments);
+//            return !$remove_keys ? $result : array_values($result);
+//        });
+//
+//        // 自定义分布，将分布属性 data 改为 items
+//        $this->app->bind(LengthAwarePaginator::class, function ($_, $arguments) {
+//            extract($arguments);
+//            return new TchLengthAwarePaginator($items, $total, $perPage, $currentPage, $options);
+//        });
     }
 
     /**

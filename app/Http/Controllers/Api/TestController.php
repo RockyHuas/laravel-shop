@@ -9,7 +9,6 @@ class TestController extends Controller
 {
     public function index()
     {
-        $a=1;
-        return ok($a);
+        throw_on(true,'23424');
     }
 }

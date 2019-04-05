@@ -90,17 +90,17 @@ if (!function_exists('load_users_routes')) {
     }
 }
 
-//// 客户端接口
+// 客户端接口
 $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => ['api', 'bindings']], function ($api) {
 
     $api->get('test', 'TestController@index');
 
-    // 开始加载路由
-    $routes = ['authorizations', 'users'];
-
-    array_map(function ($route) use ($api) {
-        $function = 'load_' . $route . '_routes';
-        $function($api);
-    }, $routes);
+//    // 开始加载路由
+//    $routes = ['authorizations', 'users'];
+//
+//    array_map(function ($route) use ($api) {
+//        $function = 'load_' . $route . '_routes';
+//        $function($api);
+//    }, $routes);
 }
 );

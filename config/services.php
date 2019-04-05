@@ -35,4 +35,13 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    // 跨域请求配置
+    'cros_service' => [
+        'allow_origin' => [],
+        'allow_headers' => 'Origin, Content-Type, Cookie, X-CSRF-TOKEN, Accept, Authorization, X-XSRF-TOKEN, signature, x-requested-with',
+        'expose_headers' => 'Authorization, authenticated',
+        'allow_methods' => 'OPTIONS, GET, POST, PATCH, PUT, DELETE',
+        'allow_credentials' => true
+    ],
+
 ];

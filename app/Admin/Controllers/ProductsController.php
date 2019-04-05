@@ -103,6 +103,21 @@ class ProductsController extends Controller
     {
         // 创建一个表单
         return Admin::form(Product::class, function (Form $form) {
+            $form->tools(function (Form\Tools $tools) {
+                // 去掉`删除`按钮
+                $tools->disableDelete();
+                // 去掉`查看`按钮
+                $tools->disableView();
+            });
+            $form->footer(function ($footer) {
+                // 去掉`查看`checkbox
+//                $footer->disableViewCheck();
+                // 去掉`继续编辑`checkbox
+//                $footer->disableEditingCheck();
+                // 去掉`继续创建`checkbox
+//                $footer->disableCreatingCheck();
+            });
+
             $form->tab('商品基本信息', function ($form) {
                 // 创建一个输入框，第一个参数 title 是模型的字段名，第二个参数是该字段描述
                 $form->text('title', '商品名称')->rules('required');

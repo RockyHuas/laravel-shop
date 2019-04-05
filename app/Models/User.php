@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWt
+class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
 
@@ -14,7 +15,17 @@ class User extends Authenticatable implements JWt
      *
      * @var array
      */
-   protected $guarded=['id'];
+    protected $guarded = ['id'];
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 
     /**
      * The attributes that should be hidden for arrays.
