@@ -2,9 +2,13 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Extensions\ExcelExpoter;
 use App\Admin\Extensions\Tools\CopyProduct;
+use App\Admin\Extensions\Tools\GlobalUploadButton;
+use App\Imports\DataImport;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\ChinaArea;
 use App\Models\Product;
 
 use Encore\Admin\Form;
@@ -13,8 +17,11 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\MessageBag;
+use Maatwebsite\Excel\Excel;
 
 class ProductsController extends Controller
 {
@@ -47,6 +54,16 @@ class ProductsController extends Controller
         });
     }
 
+    public function delete($id)
+    {
+        Product::whereKey($id)->firstOrFail()->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => '',
+        ]);
+    }
+
     /**
      * Create interface.
      *
@@ -72,11 +89,11 @@ class ProductsController extends Controller
             $grid->title('商品名称')->editable('textarea');
             $grid->image('商品图片')->image(\Storage::disk('public')->url('/'), 50, 50);
 
-            $grid->price('价格')->editable('textarea');;
+            $grid->price('价格')->editable('textarea');
             $grid->stock('剩余库存')->editable('textarea');
             $grid->on_sale('已上架')->editable('select', [1 => '是', 0 => '否']);
             $grid->is_hot('热卖产品')->editable('select', [1 => '是', 0 => '否']);
-            $grid->is_rec('推荐首页')->editable('select', [1 => '是', 0 => '否']);
+            $grid->is_rec('劲爆推荐')->editable('select', [1 => '是', 0 => '否']);
             $grid->sort('排序')->editable('textarea');;
 
             $grid->actions(function ($actions) {
@@ -90,6 +107,15 @@ class ProductsController extends Controller
                 });
             });
 
+            // 导出商品
+            $grid->exporter(new ExcelExpoter('商品数据',
+                ['商品ID', '商品名称', '商品价格', '商品库存', '商品排序'],
+                ['id', 'title', 'price', 'stock', 'sort']));
+
+            // 导入商品
+            $grid->tools(function ($tools) {
+                $tools->append(new GlobalUploadButton('batch/upload'));
+            });
 
         });
     }
@@ -127,7 +153,7 @@ class ProductsController extends Controller
                 // 创建一个选择图片的框
                 $form->image('image', '封面图')->rules('required|image');
                 // 创建一个选择图片的框，移动端图片
-                $form->image('app_image', '移动端封面图')->rules('required|image');
+                $form->image('app_image', '移动端封面图')->rules('nullable|image');
                 // 价格
                 $form->text('price', '单价')->rules('required|numeric|min:0.01');
 
@@ -141,11 +167,17 @@ class ProductsController extends Controller
                 // 创建一个富文本编辑器
                 $form->editor('description', '商品描述')->rules('required');
                 // 创建一个富文本编辑器，移动端
-                $form->editor('app_description', '移动端商品描述')->rules('required');
+                $form->editor('app_description', '移动端商品描述');
             })->tab('其他', function ($form) {
 
-                $form->select('province', '产品所属省份')->options('/admin/area/province')->load('city', '/admin/area/city');
-                $form->select('city', '产品所属地区');
+//                ->options('/admin/area/province')
+                $form->select('province', '产品所属省份')->options(function ($id) {
+                    return ChinaArea::whereParentId(86)->get()->pluck('name', 'id');
+                })->load('city', '/admin/area/city');
+                $form->select('city', '产品所属地区')->options(function ($id) {
+                    return ChinaArea::options($id);
+                });
+                $form->text('address.address');
 
                 $form->radio('is_hot', '热卖产品')->options(['1' => '是', '0' => '否'])->default('0');
 
@@ -169,5 +201,67 @@ class ProductsController extends Controller
                 $new_product->save();
             }
         }
+    }
+
+    public function upload(Request $request)
+    {
+        $method = $request->method();
+        //如果是get请求，则返回上传页面
+        if ($method == 'GET') {
+            return Admin::content(function (Content $content) {
+
+                $content->header('商品管理');
+                $content->description('导入数据');
+                $content->body(view('admin.common.GlobalUpload', ['list' => route('admin.products.index')]));
+            });
+        } else {
+            // 获取文件路径
+            $file_path = storage_path('app/' . $request->file('upfile')->storeAs('upload', 'product.xlsx'));
+
+            //获取当前文本编码格式
+            $content = file_get_contents($file_path);
+            $fileType = mb_detect_encoding($content, array('UTF-8', 'GBK', 'LATIN1', 'BIG5'));
+
+            app(Excel::class)->load($file_path, function ($reader) {
+                $rows = $reader->all();
+                // 处理导入的数据
+                $this->handleUploadData($rows);
+            }, $fileType);//以指定的编码格式打开文件
+
+            $success = new MessageBag([
+                'title' => '恭喜',
+                'message' => '导入成功',
+            ]);
+
+            return redirect()->route('admin.products.index');
+        }
+    }
+
+    /**
+     * 处理商品的数据导入
+     * @param Collection $collection
+     */
+    public function handleUploadData(Collection $collection)
+    {
+        $collection->each(function ($item) {
+            $product_id = $item[0];
+
+            if ($product_id) { // 更新商品数据
+                $product = Product::whereKey($product_id)->first();
+                $product && $product->update([
+                    'title' => $item[1],
+                    'price' => $item[2],
+                    'stock' => $item[3],
+                    'sort' => $item[4],
+                ]);
+            } else { // 导入商品数据
+                Product::create([
+                    'title' => $item[1],
+                    'price' => $item[2],
+                    'stock' => $item[3],
+                    'sort' => $item[4],
+                ]);
+            }
+        });
     }
 }

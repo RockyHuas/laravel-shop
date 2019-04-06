@@ -20,7 +20,7 @@ $('{$this->getElementClass()}').on('click', function() {
 
     $.ajax({
         method: 'post',
-        url: '{$this->resource}/copy',
+        url: '{$this->resource}/batch/copy',
         data: {
             _token:LA.token,
             ids: selectedRows(),

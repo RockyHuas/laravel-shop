@@ -1,12 +1,15 @@
 <?php
 
 namespace App\Models;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
+    use SoftDeletes;
+
     protected $guarded=['id'];
     protected $casts = [
         'on_sale' => 'boolean', // on_sale 是一个布尔类型的字段
