@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\ChinaArea;
 use Encore\Admin\Controllers\ModelForm;
+use Encore\Admin\Facades\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -15,10 +16,15 @@ class AreaController extends Controller
     // 获取省份
     public function province()
     {
-        $province = ChinaArea::whereParentId('86')->get(['id', DB::raw('name as text')]);
+        $user = Admin::user();
+        $province = ChinaArea::whereParentId('86')->get(['id', DB::raw('name as text')])->when($user->province, function ($items, $value) {
+            return $items->filter(function ($item) use ($value) {
+                return $item->id == $value;
+            });
+        })->unique();
 
         // 追加一个"全国"的选项进去
-        $province->prepend(['id' => 0, 'text' => '全部']);
+        if (!$user->province) $province->prepend(['id' => 0, 'text' => '全部']);
 
         return response()->json($province);
     }
@@ -30,11 +36,15 @@ class AreaController extends Controller
 
         // 如果是 0
         if (!$province_id) return response()->json([]);
-
-        $city = ChinaArea::whereParentId($province_id)->get(['id', DB::raw('name as text')]);
+        $user = Admin::user();
+        $city = ChinaArea::whereParentId($province_id)->get(['id', DB::raw('name as text')])->when($user->city, function ($items, $value) {
+            return $items->filter(function ($item) use ($value) {
+                return $item->id == $value;
+            });
+        })->unique();
 
         // 追加一个"所有城市"的选项进去
-        $city->prepend(['id' => 0, 'text' => '全部']);
+        if (!$user->city) $city->prepend(['id' => 0, 'text' => '全部']);
 
         return response()->json($city);
     }

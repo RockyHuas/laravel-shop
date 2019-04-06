@@ -116,6 +116,56 @@ class ProductsController extends Controller
             $grid->tools(function ($tools) {
                 $tools->append(new GlobalUploadButton('batch/upload'));
             });
+            // 默认过滤条件
+            $user = Admin::user();
+            // 如果选择了品牌只能更新某个品牌的产品
+            if ($user->brand_id) {
+                $grid->model()->where('brand_id', $user->brand_id);
+            }
+            if ($user->category_id) {
+                $grid->model()->where('category_id', $user->category_id);
+            }
+
+            if ($user->province) {
+                $grid->model()->where('province', $user->province);
+            }
+
+            if ($user->city) {
+                $grid->model()->where('city', $user->city);
+            }
+
+            $grid->filter(function ($filter) {
+
+                // 去掉默认的id过滤器
+                $filter->disableIdFilter();
+
+                // 添加标题过滤
+                $filter->like('title', '商品名称');
+                // 过滤上下架
+                $filter->equal('on_sale', '是否上架')->radio([
+                    '' => '所有',
+                    1 => '是',
+                    0 => '否',
+                ]);
+
+                // 过滤热卖
+                $filter->equal('is_hot', '是否热卖')->radio([
+                    '' => '所有',
+                    1 => '是',
+                    0 => '否',
+                ]);
+
+                // 过滤劲爆
+                $filter->equal('is_rec', '是否劲爆推荐')->radio([
+                    '' => '所有',
+                    1 => '是',
+                    0 => '否',
+                ]);
+
+                $filter->in('province', '产品所属省份')->multipleSelect('/admin/area/province')->load('city', '/admin/area/city');
+
+                $filter->in('city', '产品所属地区')->multipleSelect('/admin/area/city');
+            });
 
         });
     }
@@ -135,18 +185,27 @@ class ProductsController extends Controller
                 // 去掉`查看`按钮
                 $tools->disableView();
             });
+            $user = Admin::user();
 
-            $form->tab('商品基本信息', function ($form) {
+            $form->tab('商品基本信息', function ($form) use ($user) {
                 // 创建一个输入框，第一个参数 title 是模型的字段名，第二个参数是该字段描述
                 $form->text('title', '商品名称')->rules('required');
                 // 商品分类
-                $categories = Category::get(['id', DB::raw('title as text')])->mapWithKeys(function ($item) {
+                $categories = Category::get(['id', DB::raw('title as text')])->when($user->category_id, function ($items, $value) {
+                    return $items->filter(function ($item) use ($value) {
+                        return $item->id == $value;
+                    });
+                })->mapWithKeys(function ($item) {
                     return [$item->id => $item->text];
                 })->toArray();
 
                 $form->select('category_id', '分类')->options($categories)->rules('required');
                 // 品牌
-                $brands = Brand::get(['id', DB::raw('title as text')])->mapWithKeys(function ($item) {
+                $brands = Brand::get(['id', DB::raw('title as text')])->when($user->brand_id, function ($items, $value) {
+                    return $items->filter(function ($item) use ($value) {
+                        return $item->id == $value;
+                    });
+                })->mapWithKeys(function ($item) {
                     return [$item->id => $item->text];
                 })->toArray();
                 $form->select('brand_id', '品牌')->options($brands)->rules('required');
@@ -168,16 +227,28 @@ class ProductsController extends Controller
                 $form->editor('description', '商品描述')->rules('required');
                 // 创建一个富文本编辑器，移动端
                 $form->editor('app_description', '移动端商品描述');
-            })->tab('其他', function ($form) {
+            })->tab('其他', function ($form) use ($user) {
 
-//                ->options('/admin/area/province')
-                $form->select('province', '产品所属省份')->options(function ($id) {
-                    return ChinaArea::whereParentId(86)->get()->pluck('name', 'id');
+                $form->select('province', '产品所属省份')->options(function ($id) use ($user) {
+                    $provinces = ChinaArea::whereParentId(86)->get()->when($user->province, function ($items, $value) {
+                        return $items->filter(function ($item) use ($value) {
+                            return $item->id == $value;
+                        });
+                    })->unique();
+                    if (!$user->province) $provinces->prepend(['id' => 0, 'name' => '全国']);
+                    return $provinces->pluck('name', 'id');
                 })->load('city', '/admin/area/city');
-                $form->select('city', '产品所属地区')->options(function ($id) {
-                    return ChinaArea::options($id);
+                $form->select('city', '产品所属地区')->options(function ($id) use ($user) {
+                    if ($id) {
+                        $cities = ChinaArea::options($id)->when($user->city, function ($items, $value) {
+                            return $items->filter(function ($item, $key) use ($value) {
+                                return $key == $value;
+                            });
+                        })->unique();
+                        if (!$user->city) $cities->prepend('全部地区', 0);
+                        return $cities;
+                    }
                 });
-                $form->text('address.address');
 
                 $form->radio('is_hot', '热卖产品')->options(['1' => '是', '0' => '否'])->default('0');
 
@@ -243,7 +314,8 @@ class ProductsController extends Controller
      */
     public function handleUploadData(Collection $collection)
     {
-        $collection->each(function ($item) {
+        $user = Admin::user();
+        $collection->each(function ($item) use ($user) {
             $product_id = $item[0];
 
             if ($product_id) { // 更新商品数据
@@ -255,12 +327,16 @@ class ProductsController extends Controller
                     'sort' => $item[4],
                 ]);
             } else { // 导入商品数据
-                Product::create([
+                $insert_data = [
                     'title' => $item[1],
                     'price' => $item[2],
                     'stock' => $item[3],
                     'sort' => $item[4],
-                ]);
+                ];
+                if ($user->province) $insert_data['province'] = $user->province;
+                if ($user->city) $insert_data['city'] = $user->city;
+                // 开始插入数据
+                Product::create($insert_data);
             }
         });
     }

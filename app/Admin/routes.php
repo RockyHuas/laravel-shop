@@ -16,7 +16,6 @@ Route::group([
     $router->get('area/city', 'AreaController@city');
     // 地区
     $router->get('area/district', 'AreaController@district');
-    $router->get('area/province', 'AreaController@province');
     $router->get('users', 'UsersController@index');
 
     // 产品列表
