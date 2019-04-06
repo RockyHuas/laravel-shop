@@ -39,4 +39,35 @@ Route::group([
     $router->post('orders/{order}/ship', 'OrdersController@ship')->name('admin.orders.ship');
     $router->post('orders/{order}/refund', 'OrdersController@handleRefund')->name('admin.orders.handle_refund');
 
+    // 管理员列表
+    $router->get('admin/user', 'AdminUserController@index')->name('admin.admin.user.index');
+    // 管理员创建
+    $router->get('admin/user/create', 'AdminUserController@create')->name('admin.admin.user.create');
+    $router->post('admin/user', 'AdminUserController@store')->name('admin.admin.user.store');
+    // 管理员删除
+    $router->delete('admin/user/{id}', 'AdminUserController@delete')->name('admin.admin.user.delete');
+    // 管理员详情
+    $router->get('admin/user/{id}/edit', 'AdminUserController@edit')->name('admin.admin.user.edit');
+
+
+    // 角色列表
+    $router->get('admin/role', 'AdminRoleController@index')->name('admin.admin.role.index');
+    // 角色创建
+    $router->get('admin/role/create', 'AdminRoleController@create')->name('admin.admin.role.create');
+    $router->post('admin/role', 'AdminRoleController@store')->name('admin.admin.role.store');
+    // 角色删除
+    $router->delete('admin/role/{id}', 'AdminRoleController@delete')->name('admin.admin.role.delete');
+    // 角色详情
+    $router->get('admin/role/{id}/edit', 'AdminRoleController@edit')->name('admin.admin.role.edit');
+
+    // 权限列表
+    $router->get('admin/permission', 'AdminPermissionController@index')->name('admin.admin.permission.index');
+    // 权限创建
+    $router->get('admin/permission/create', 'AdminPermissionController@create')->name('admin.admin.permission.create');
+    $router->post('admin/permission', 'AdminPermissionController@store')->name('admin.admin.permission.store');
+    // 权限删除
+    $router->delete('admin/permission/{id}', 'AdminPermissionController@delete')->name('admin.admin.permission.delete');
+    // 权限详情
+    $router->get('admin/permission/{id}/edit', 'AdminPermissionController@edit')->name('admin.admin.permission.edit');
+
 });
