@@ -23,5 +23,9 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
     $api->post('images', 'ImageController@store')
         ->name('api.images.store');
 
+    // 登录
+    $api->post('authorizations', 'AuthorizationController@store')
+        ->name('api.authorizations.store');
+
 }
 );
