@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Api;
+namespace App\Repositories;
 
 use Auth;
 

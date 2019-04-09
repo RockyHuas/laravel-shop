@@ -27,5 +27,8 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
     $api->post('authorizations', 'AuthorizationController@store')
         ->name('api.authorizations.store');
 
+    // 用户注册
+    $api->post('users', 'UserController@store')
+        ->name('api.users.store');
 }
 );

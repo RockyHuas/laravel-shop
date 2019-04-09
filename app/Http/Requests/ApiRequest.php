@@ -15,9 +15,14 @@ class ApiRequest extends BaseRequest
     }
 
     protected $_rules = [
-        'password' => 'required|string|min:6',
+        'password' => 'required|string|min:6|confirmed',
         'real_name' => 'required|string',
         'gender' => 'nullable|integer|in:0,1,2',
         'image' => 'required',
+        'phone' => 'required|integer|size:11',
+        'province_id' => 'required|integer',
+        'city_id' => 'required|integer',
+        'district_id' => 'nullable|integer',
+        'shop_name' => 'nullable|string',
     ];
 }
