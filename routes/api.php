@@ -32,7 +32,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
         ->name('api.users.store');
 
     $api->group(['middleware' => ['api.auth','user_active']], function ($api) {
-
+        $api->get('article/categories', 'HomeController@getArticleCategory');
     });
 }
 );

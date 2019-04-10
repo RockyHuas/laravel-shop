@@ -21,7 +21,8 @@ trait UserTrait
         $insert_data['password'] = bcrypt($insert_data['password']);
 
         // 判断用户名是否重复
-        throw_on(User::wherePhone($insert_data['phone'])->first(), '注册用户重复');
+        throw_on(User::whereName($insert_data['name'])->first(), '用户名重复');
+        throw_on(User::wherePhone($insert_data['phone'])->first(), '注册手机重复');
 
         // 创建
         return User::create($insert_data);

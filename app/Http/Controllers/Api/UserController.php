@@ -24,6 +24,7 @@ class UserController extends Controller
     public function store(ApiRequest $request)
     {
         $params = $request->fields([
+            'name',
             'phone',
             'password',
             'shop_name',
