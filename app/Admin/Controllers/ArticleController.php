@@ -3,25 +3,26 @@
 namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Brand;
+use App\Models\Article;
+use App\Models\ArticleCategory;
 use Encore\Admin\Controllers\ModelForm;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 
-class ProductBrandController extends Controller
+class ArticleController extends Controller
 {
     use ModelForm;
 
     /**
-     * 商品品牌
+     * 文章
      * @return Content
      */
     public function index()
     {
         return Admin::content(function (Content $content) {
-            $content->header('商品品牌列表');
+            $content->header('文章列表');
             $content->body($this->grid());
         });
     }
@@ -34,7 +35,7 @@ class ProductBrandController extends Controller
     public function create()
     {
         return Admin::content(function (Content $content) {
-            $content->header('创建商品品牌');
+            $content->header('创建文章');
             $content->body($this->form());
         });
     }
@@ -48,14 +49,14 @@ class ProductBrandController extends Controller
     public function edit($id)
     {
         return Admin::content(function (Content $content) use ($id) {
-            $content->header('编辑商品品牌');
+            $content->header('编辑文章');
             $content->body($this->form()->edit($id));
         });
     }
 
     public function delete($id)
     {
-        Brand::whereKey($id)->firstOrFail()->delete();
+        Article::whereKey($id)->firstOrFail()->delete();
 
         return response()->json([
             'status' => true,
@@ -69,13 +70,12 @@ class ProductBrandController extends Controller
      */
     protected function grid()
     {
-        return Admin::grid(Brand::class, function (Grid $grid) {
+        return Admin::grid(Article::class, function (Grid $grid) {
             $grid->id('ID')->sortable();
-            $grid->title('商品品牌名称');
-            $grid->image('商品品牌图片')->image(\Storage::disk('public')->url('/'), 50, 50);
-            $grid->is_rec('推荐首页')->editable('select', [1 => '是', 0 => '否']);
-            $grid->summary('简介');
-            $grid->sort('排序')->editable('textarea');;
+            $grid->title('文章名称');
+            $grid->article_category()->title('文章分类');
+            $grid->sort('文章排序');
+            $grid->created_at('创建时间');
             $grid->actions(function ($actions) {
                 $actions->disableView();
             });
@@ -83,10 +83,17 @@ class ProductBrandController extends Controller
             $grid->filter(function ($filter) {
                 // 去掉默认的id过滤器
                 $filter->disableIdFilter();
-            });
-            $grid->disableFilter();
-            $grid->disableExport();
 
+                // 添加标题过滤
+                $filter->like('title', '文章名称');
+
+                // 文章分类
+                $article_categories = ArticleCategory::get(['id', \DB::raw('title as text')])->mapWithKeys(function ($item) {
+                    return [$item->id => $item->text];
+                })->toArray();
+                $filter->equal('article_category_id', '文章分类')->select($article_categories);
+            });
+            $grid->disableExport();
 
         });
     }
@@ -99,7 +106,7 @@ class ProductBrandController extends Controller
     protected function form()
     {
         // 创建一个表单
-        return Admin::form(Brand::class, function (Form $form) {
+        return Admin::form(Article::class, function (Form $form) {
             $form->tools(function (Form\Tools $tools) {
                 // 去掉`删除`按钮
                 $tools->disableDelete();
@@ -107,14 +114,16 @@ class ProductBrandController extends Controller
                 $tools->disableView();
             });
 
-            $form->text('title', '商品品牌名称')->rules('required');
-            // 创建一个选择图片的框
-            $form->image('image', '封面图')->rules('required|image');
-            // 创建一个选择图片的框，移动端图片
-            $form->image('app_image', '移动端封面图')->rules('nullable|image');
-            $form->text('summary', '简介');
+            $form->text('title', '文章名称')->rules('required');
 
-            $form->radio('is_rec', '推荐首页')->options(['1' => '是', '0' => '否'])->default('0');
+            // 文章分类
+            $article_categories = ArticleCategory::get(['id', \DB::raw('title as text')])->mapWithKeys(function ($item) {
+                return [$item->id => $item->text];
+            })->toArray();
+
+            $form->select('article_category_id', '文章分类')->options($article_categories)->rules('required');
+            $form->editor('description', '文章详情')->rules('required');
+            $form->editor('app_description', '移动端文章详情');
 
             $form->text('sort', '排序（数字越小越靠前）')->default(0);
         });

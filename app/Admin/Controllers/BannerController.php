@@ -3,25 +3,25 @@
 namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Brand;
+use App\Models\Banner;
 use Encore\Admin\Controllers\ModelForm;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 
-class ProductBrandController extends Controller
+class BannerController extends Controller
 {
     use ModelForm;
 
     /**
-     * 商品品牌
+     * banner
      * @return Content
      */
     public function index()
     {
         return Admin::content(function (Content $content) {
-            $content->header('商品品牌列表');
+            $content->header('banner列表');
             $content->body($this->grid());
         });
     }
@@ -34,7 +34,7 @@ class ProductBrandController extends Controller
     public function create()
     {
         return Admin::content(function (Content $content) {
-            $content->header('创建商品品牌');
+            $content->header('创建banner');
             $content->body($this->form());
         });
     }
@@ -48,14 +48,14 @@ class ProductBrandController extends Controller
     public function edit($id)
     {
         return Admin::content(function (Content $content) use ($id) {
-            $content->header('编辑商品品牌');
+            $content->header('编辑banner');
             $content->body($this->form()->edit($id));
         });
     }
 
     public function delete($id)
     {
-        Brand::whereKey($id)->firstOrFail()->delete();
+        Banner::whereKey($id)->firstOrFail()->delete();
 
         return response()->json([
             'status' => true,
@@ -69,13 +69,12 @@ class ProductBrandController extends Controller
      */
     protected function grid()
     {
-        return Admin::grid(Brand::class, function (Grid $grid) {
+        return Admin::grid(Banner::class, function (Grid $grid) {
             $grid->id('ID')->sortable();
-            $grid->title('商品品牌名称');
-            $grid->image('商品品牌图片')->image(\Storage::disk('public')->url('/'), 50, 50);
-            $grid->is_rec('推荐首页')->editable('select', [1 => '是', 0 => '否']);
-            $grid->summary('简介');
-            $grid->sort('排序')->editable('textarea');;
+            $grid->title('banner名称');
+            $grid->link('banner链接');
+            $grid->sort('banner排序');
+            $grid->created_at('创建时间');
             $grid->actions(function ($actions) {
                 $actions->disableView();
             });
@@ -83,10 +82,11 @@ class ProductBrandController extends Controller
             $grid->filter(function ($filter) {
                 // 去掉默认的id过滤器
                 $filter->disableIdFilter();
-            });
-            $grid->disableFilter();
-            $grid->disableExport();
 
+                // 添加标题过滤
+                $filter->like('title', 'banner名称');
+            });
+            $grid->disableExport();
 
         });
     }
@@ -99,7 +99,7 @@ class ProductBrandController extends Controller
     protected function form()
     {
         // 创建一个表单
-        return Admin::form(Brand::class, function (Form $form) {
+        return Admin::form(Banner::class, function (Form $form) {
             $form->tools(function (Form\Tools $tools) {
                 // 去掉`删除`按钮
                 $tools->disableDelete();
@@ -107,14 +107,11 @@ class ProductBrandController extends Controller
                 $tools->disableView();
             });
 
-            $form->text('title', '商品品牌名称')->rules('required');
-            // 创建一个选择图片的框
-            $form->image('image', '封面图')->rules('required|image');
-            // 创建一个选择图片的框，移动端图片
-            $form->image('app_image', '移动端封面图')->rules('nullable|image');
-            $form->text('summary', '简介');
+            $form->text('title', 'banner名称')->rules('required');
+            $form->text('link', 'banner链接')->rules('required');
 
-            $form->radio('is_rec', '推荐首页')->options(['1' => '是', '0' => '否'])->default('0');
+            $form->image('image', 'banner图片')->rules('required');
+            $form->image('app_image', '移动端banner图片');
 
             $form->text('sort', '排序（数字越小越靠前）')->default(0);
         });

@@ -16,17 +16,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $guarded = ['id'];
-
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
-
+//    protected $fillable=['status'];
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -40,10 +30,37 @@ class User extends Authenticatable implements JWTSubject
         'email_verified' => 'boolean',
     ];
 
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
     // 用户地址
     public function addresses()
     {
         return $this->hasMany(UserAddress::class);
+    }
+    // 省份
+    public function province()
+    {
+        return $this->belongsTo(ChinaArea::class);
+    }
+
+    // 市
+    public function city()
+    {
+        return $this->belongsTo(ChinaArea::class);
+    }
+
+    // 区
+    public function district()
+    {
+        return $this->belongsTo(ChinaArea::class);
     }
 
     // 购物车详情

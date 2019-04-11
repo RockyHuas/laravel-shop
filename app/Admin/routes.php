@@ -16,7 +16,17 @@ Route::group([
     $router->get('area/city', 'AreaController@city');
     // 地区
     $router->get('area/district', 'AreaController@district');
-    $router->get('users', 'UsersController@index');
+    // 用户列表
+    $router->get('users', 'UserController@index')->name('admin.Users.index');
+    // 用户创建
+    $router->get('users/create', 'UserController@create');
+    $router->post('users', 'UserController@store');
+    // 用户删除
+    $router->delete('users/{id}', 'UserController@delete');
+    // 用户详情
+    $router->get('users/{id}/edit', 'UserController@edit');
+    // 用户更新
+    $router->put('users/{id}', 'UserController@update');
 
     // 产品列表
     $router->get('products', 'ProductsController@index')->name('admin.products.index');
@@ -61,7 +71,7 @@ Route::group([
     $router->get('products/batch/upload', 'ProductsController@upload'); // get 请求
 
     // 文章分类列表
-    $router->get('article/categories', 'ArticleCategoryController@index')->name('admin.article.brand.index');
+    $router->get('article/categories', 'ArticleCategoryController@index')->name('admin.article.category.index');
     // 文章分类创建
     $router->get('article/categories/create', 'ArticleCategoryController@create');
     $router->post('article/categories', 'ArticleCategoryController@store');
@@ -71,6 +81,30 @@ Route::group([
     $router->get('article/categories/{id}/edit', 'ArticleCategoryController@edit');
     // 文章分类更新
     $router->put('article/categories/{id}', 'ArticleCategoryController@update');
+
+    // 文章列表
+    $router->get('articles', 'ArticleController@index')->name('admin.article.index');
+    // 文章创建
+    $router->get('articles/create', 'ArticleController@create');
+    $router->post('articles', 'ArticleController@store');
+    // 文章删除
+    $router->delete('articles/{id}', 'ArticleController@delete');
+    // 文章详情
+    $router->get('articles/{id}/edit', 'ArticleController@edit');
+    // 文章更新
+    $router->put('articles/{id}', 'ArticleController@update');
+
+    // banner 列表
+    $router->get('banners', 'BannerController@index')->name('admin.banner.index');
+    // banner 创建
+    $router->get('banners/create', 'BannerController@create');
+    $router->post('banners', 'BannerController@store');
+    // banner 删除
+    $router->delete('banners/{id}', 'BannerController@delete');
+    // banner 详情
+    $router->get('banners/{id}/edit', 'BannerController@edit');
+    // banner 更新
+    $router->put('banners/{id}', 'BannerController@update');
 
     $router->get('orders', 'OrdersController@index')->name('admin.orders.index');
     $router->get('orders/{order}', 'OrdersController@show')->name('admin.orders.show');
@@ -113,5 +147,29 @@ Route::group([
     $router->get('admin/permission/{id}/edit', 'AdminPermissionController@edit')->name('admin.admin.permission.edit');
     // 保存权限
     $router->put('admin/permission/{id}', 'AdminPermissionController@update')->name('admin.admin.permission.update');
+
+    // 广告列表
+    $router->get('ads', 'AdController@index')->name('admin.ad.index');
+    // 广告创建
+    $router->get('ads/create', 'AdController@create');
+    $router->post('ads', 'AdController@store');
+    // 广告删除
+    $router->delete('ads/{id}', 'AdController@delete');
+    // 广告详情
+    $router->get('ads/{id}/edit', 'AdController@edit');
+    // 广告更新
+    $router->put('ads/{id}', 'AdController@update');
+
+    // 广告分类列表
+    $router->get('ad_categories', 'AdCategoryController@index')->name('admin.ad.category.index');
+    // 广告分类创建
+    $router->get('ad_categories/create', 'AdCategoryController@create');
+    $router->post('ad_categories', 'AdCategoryController@store');
+    // 广告分类删除
+    $router->delete('ad_categories/{id}', 'AdCategoryController@delete');
+    // 广告分类详情
+    $router->get('ad_categories/{id}/edit', 'AdCategoryController@edit');
+    // 广告分类更新
+    $router->put('ad_categories/{id}', 'AdCategoryController@update');
 
 });

@@ -218,7 +218,7 @@ class ProductsController extends Controller
 
                 $form->text('stock', '剩余库存')->rules('required|integer|min:0');
                 // 创建一组单选框
-                $form->radio('on_sale', '上架')->options(['1' => '是', '0' => '否'])->default('0');
+                $form->radio('on_sale', '上架')->options(['1' => '是', '0' => '否'])->default('1');
 
             })->tab('详细信息', function ($form) {
                 $form->multipleImage('images', '滑动图')->removable();
