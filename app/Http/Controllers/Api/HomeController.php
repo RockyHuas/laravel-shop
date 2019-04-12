@@ -17,11 +17,18 @@ class HomeController extends Controller
     }
 
     /**
-     *
+     * 文章分类
      * @param ApiRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function getArticleCategory(ApiRequest $request)
+    {
+        $result = $this->repo->articleCategoryGet();
+
+        return ok($result);
+    }
+
+    public function getBanners(ApiRequest $request)
     {
         $result = $this->repo->articleCategoryGet();
 
