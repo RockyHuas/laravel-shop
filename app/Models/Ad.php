@@ -8,7 +8,6 @@ use Illuminate\Support\Str;
 class Ad extends Model
 {
     protected $guarded = ['id'];
-    protected $hidden=['image','app_image'];
     // 广告分类
     public function ad_category()
     {

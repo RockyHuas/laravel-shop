@@ -18,7 +18,6 @@ class Product extends Model
         'app_images' => 'json'
     ];
 
-    protected $hidden=['image','images','app_image','app_images'];
 
     // PC 端图片
     public function getImageUrlAttribute()
