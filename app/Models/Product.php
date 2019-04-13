@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
@@ -10,12 +11,14 @@ class Product extends Model
 {
     use SoftDeletes;
 
-    protected $guarded=['id'];
+    protected $guarded = ['id'];
     protected $casts = [
         'on_sale' => 'boolean', // on_sale 是一个布尔类型的字段
-        'images'=>'json',
-        'app_images'=>'json'
+        'images' => 'json',
+        'app_images' => 'json'
     ];
+
+    protected $hidden=['image','images','app_image','app_images'];
 
     // PC 端图片
     public function getImageUrlAttribute()
@@ -26,15 +29,17 @@ class Product extends Model
     // 移动端图片
     public function getAppImageUrlAttribute()
     {
-        return $this->imageUrLConvert($this->attributes['app_image']);
+        return $this->attributes['app_image']
+            ? $this->imageUrLConvert($this->attributes['app_image'])
+            : $this->imageUrLConvert($this->attributes['image']);
     }
 
     // PC 端多图片
     public function getImagesUrlAttribute()
     {
-        $images=$this->getAttribute('images');
+        $images = $this->getAttribute('images');
 
-        return collect($images)->map(function($image){
+        return collect($images)->map(function ($image) {
             return $this->imageUrLConvert($image);
         });
     }
@@ -42,11 +47,13 @@ class Product extends Model
     // 移动端多图片
     public function getAppImagesUrlAttribute()
     {
-        $images=$this->getAttribute('app_images');
+        $images = $this->getAttribute('app_images');
 
-        return collect($images)->map(function($image){
-            return $this->imageUrLConvert($image);
-        });
+        return $images
+            ? collect($images)->map(function ($image) {
+                return $this->imageUrLConvert($image);
+            })
+            : $this->getImagesUrlAttribute();
     }
 
 
@@ -62,6 +69,11 @@ class Product extends Model
             return $url;
         }
         return \Storage::disk('public')->url($url);
+    }
+
+    public function getAppDescriptionAttribute($value)
+    {
+        return $value ?: $this->description;
     }
 
     // 关联的品牌
