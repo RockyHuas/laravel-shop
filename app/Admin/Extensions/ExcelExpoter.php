@@ -13,24 +13,22 @@ class ExcelExpoter extends AbstractExporter
     private $filename;  //导出的文件名
     private $fields;    //导出的数据库中字段
 
-    public function __construct(String $filename, Array $title, Array $fields)
+    protected $repo;
+
+
+    public function __construct(ExcelDataInterface $repo)
     {
         parent::__construct();
-        $this->filename = $filename;
-        $this->title = $title;
-        $this->fields = $fields;
+
+       $this->repo=$repo;
     }
 
     public function export()
     {
-        Excel::create($this->filename, function ($excel) {
+        Excel::create('export', function ($excel) {
             $excel->sheet('Shee1', function ($sheet) {
                 // 这段逻辑是从表格数据中取出需要导出的字段
-                $rows = collect($this->getData())->map(function ($item) {
-                    return array_only($item, $this->fields);
-                });
-
-                $rows->prepend($this->title);
+                $rows =$this->repo->exportData(collect($this->getData()));
 
                 $sheet->rows($rows);
             });

@@ -108,8 +108,8 @@ Route::group([
 
     $router->get('orders', 'OrdersController@index')->name('admin.orders.index');
     $router->get('orders/{order}', 'OrdersController@show')->name('admin.orders.show');
-    $router->post('orders/{order}/ship', 'OrdersController@ship')->name('admin.orders.ship');
-    $router->post('orders/{order}/refund', 'OrdersController@handleRefund')->name('admin.orders.handle_refund');
+    $router->get('orders/{order}/print', 'OrdersController@print')->name('admin.orders.print');
+    $router->post('orders/{order}/change', 'OrdersController@change')->name('admin.orders.change');
 
     // 管理员列表
     $router->get('admin/user', 'AdminUserController@index')->name('admin.admin.user.index');
@@ -172,4 +172,27 @@ Route::group([
     // 广告分类更新
     $router->put('ad_categories/{id}', 'AdCategoryController@update');
 
+    // 系统设置列表
+    $router->get('system_settings', 'SystemSettingController@index')->name('admin.system.setting.index');
+    // 系统设置创建
+    $router->get('system_settings/create', 'SystemSettingController@create');
+    $router->post('system_settings', 'SystemSettingController@store');
+    // 系统设置删除
+    $router->delete('system_settings/{id}', 'SystemSettingController@delete');
+    // 系统设置详情
+    $router->get('system_settings/{id}/edit', 'SystemSettingController@edit');
+    // 系统设置更新
+    $router->put('system_settings/{id}', 'SystemSettingController@update');
+
+    // 支付方式列表
+    $router->get('pays', 'PayController@index')->name('admin.pay.index');
+    // 支付方式创建
+    $router->get('pays/create', 'PayController@create');
+    $router->post('pays', 'PayController@store');
+    // 支付方式删除
+    $router->delete('pays/{id}', 'PayController@delete');
+    // 支付方式详情
+    $router->get('pays/{id}/edit', 'PayController@edit');
+    // 支付方式更新
+    $router->put('pays/{id}', 'PayController@update');
 });

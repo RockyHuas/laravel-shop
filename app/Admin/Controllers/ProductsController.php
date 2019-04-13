@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Extensions\ExcelDataInterface;
 use App\Admin\Extensions\ExcelExpoter;
 use App\Admin\Extensions\Tools\CopyProduct;
 use App\Admin\Extensions\Tools\GlobalUploadButton;
@@ -23,7 +24,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\MessageBag;
 use Maatwebsite\Excel\Excel;
 
-class ProductsController extends Controller
+class ProductsController extends Controller implements ExcelDataInterface
 {
     use ModelForm;
 
@@ -77,6 +78,13 @@ class ProductsController extends Controller
         });
     }
 
+    public function exportData($data)
+    {
+        return $data->map(function ($order) {
+            return array_only($order, ['id', 'title', 'price', 'stock', 'sort']);
+        })->prepend(['商品ID', '商品名称', '商品价格', '商品库存', '商品排序']);
+    }
+
     /**
      * Make a grid builder.
      *
@@ -108,9 +116,7 @@ class ProductsController extends Controller
             });
 
             // 导出商品
-            $grid->exporter(new ExcelExpoter('商品数据',
-                ['商品ID', '商品名称', '商品价格', '商品库存', '商品排序'],
-                ['id', 'title', 'price', 'stock', 'sort']));
+            $grid->exporter(new ExcelExpoter($this));
 
             // 导入商品
             $grid->tools(function ($tools) {
