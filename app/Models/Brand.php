@@ -8,7 +8,6 @@ use Illuminate\Support\Str;
 class Brand extends Model
 {
     protected $guarded=['id'];
-    protected $hidden=['image','app_image'];
 
     // 关联的产品
     public function products()

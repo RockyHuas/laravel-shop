@@ -32,8 +32,6 @@ class Product extends Model
         });
     }
 
-    protected $hidden=['image','images','app_image','app_images'];
-
     // PC 端图片
     public function getImageUrlAttribute()
     {

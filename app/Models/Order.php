@@ -31,7 +31,7 @@ class Order extends Model
         self::SHIP_STATUS_RECEIVED => '已收货',
     ];
 
-    protected $fillable = ['id'];
+    protected $guarded = ['id'];
 
     protected $casts = [
         'closed' => 'boolean',
@@ -67,6 +67,12 @@ class Order extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    // 支付方式
+    public function pay()
+    {
+        return $this->belongsTo(Pay::class);
     }
 
     // 订单关联的产品
