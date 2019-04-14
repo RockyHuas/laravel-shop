@@ -18,6 +18,20 @@ class Product extends Model
         'app_images' => 'json'
     ];
 
+    /**
+     * 只查询本地方的产品
+     * @param $query
+     * @return mixed
+     */
+    public function scopeCity($query)
+    {
+        $user=\Auth::user();
+        return $query->where(function ($query2)use($user){
+            $query2->whereIn('province_id',[0,$user->province_id])
+                ->whereIn('city_id',[0,$user->city_id]);
+        });
+    }
+
     protected $hidden=['image','images','app_image','app_images'];
 
     // PC 端图片

@@ -36,6 +36,14 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
         $api->get('article/categories', 'HomeController@getArticleCategory');
         // banner
         $api->get('banners', 'HomeController@getBanners');
+        // 广告
+        $api->get('home/ads', 'HomeController@getAds');
+        // 推荐首页品牌
+        $api->get('home/ads', 'HomeController@getRecBrands');
+        // 推荐商品
+        $api->get('home/rec_products', 'HomeController@getRecProducts');
+        // 劲爆产品
+        $api->get('home/hot_products', 'HomeController@getHotProducts');
         //
     });
 }
