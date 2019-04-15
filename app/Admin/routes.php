@@ -28,6 +28,9 @@ Route::group([
     // 用户更新
     $router->put('users/{id}', 'UserController@update');
 
+    $router->get('users/batch/upload', 'UserController@upload'); // get 请求
+    $router->post('users/batch/upload', 'UserController@upload');// post 请求
+
     // 产品列表
     $router->get('products', 'ProductsController@index')->name('admin.products.index');
     // 产品创建
