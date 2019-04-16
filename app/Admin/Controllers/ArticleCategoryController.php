@@ -72,6 +72,7 @@ class ArticleCategoryController extends Controller
         return Admin::grid(ArticleCategory::class, function (Grid $grid) {
             $grid->id('ID')->sortable();
             $grid->title('文章分类名称');
+            $grid->sort('文章分类排序');
             $grid->summary('简介');
             $grid->actions(function ($actions) {
                 $actions->disableView();
@@ -104,6 +105,7 @@ class ArticleCategoryController extends Controller
             });
 
             $form->text('title', '文章分类名称')->rules('required');
+            $form->text('sort', '排序（数字越小越靠前）')->default(0);
             $form->text('summary', '简介');
         });
     }

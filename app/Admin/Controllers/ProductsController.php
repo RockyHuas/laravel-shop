@@ -236,22 +236,22 @@ class ProductsController extends Controller implements ExcelDataInterface
             })->tab('其他', function ($form) use ($user) {
 
                 $form->select('province', '产品所属省份')->options(function ($id) use ($user) {
-                    $provinces = ChinaArea::whereParentId(86)->get()->when($user->province, function ($items, $value) {
+                    $provinces = ChinaArea::whereParentId(86)->get()->when($user->province_id, function ($items, $value) {
                         return $items->filter(function ($item) use ($value) {
                             return $item->id == $value;
                         });
                     })->unique();
-                    if (!$user->province) $provinces->prepend(['id' => 0, 'name' => '全国']);
+                    if (!$user->province_id) $provinces->prepend(['id' => 0, 'name' => '全国']);
                     return $provinces->pluck('name', 'id');
                 })->load('city', '/admin/area/city');
                 $form->select('city', '产品所属地区')->options(function ($id) use ($user) {
                     if ($id) {
-                        $cities = ChinaArea::options($id)->when($user->city, function ($items, $value) {
+                        $cities = ChinaArea::options($id)->when($user->city_id, function ($items, $value) {
                             return $items->filter(function ($item, $key) use ($value) {
                                 return $key == $value;
                             });
                         })->unique();
-                        if (!$user->city) $cities->prepend('全部地区', 0);
+                        if (!$user->city_id) $cities->prepend('全部地区', 0);
                         return $cities;
                     }
                 });
