@@ -44,7 +44,8 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
         $api->get('home/rec_products', 'HomeController@getRecProducts');
         // 劲爆产品
         $api->get('home/hot_products', 'HomeController@getHotProducts');
-        //
+        // 产品分类
+        $api->get('product/categories', 'ProductController@getCategories');
     });
 }
 );

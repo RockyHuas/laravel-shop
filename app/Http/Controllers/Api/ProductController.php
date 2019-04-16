@@ -3,27 +3,28 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\ApiRequest;
-use App\Repositories\HomeRepo;
+use App\Repositories\ProductRepo;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class HomeController extends Controller
+class ProductController extends Controller
 {
     protected $repo;
 
-    public function __construct(HomeRepo $repo)
+    public function __construct(ProductRepo $repo)
     {
         $this->repo = $repo;
     }
 
+
     /**
-     * 文章分类
+     * 产品分类
      * @param ApiRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getArticleCategory(ApiRequest $request)
+    public function getCategories(ApiRequest $request)
     {
-        $result = $this->repo->articleCategoryGet();
+        $result = $this->repo->productCatgoryQuery();
 
         return ok($result);
     }
