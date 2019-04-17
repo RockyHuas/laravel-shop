@@ -8,8 +8,6 @@ use Auth;
 
 trait CartItemTrait
 {
-
-
     /**
      * 购物车商品列表
      * @return CartItem[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection

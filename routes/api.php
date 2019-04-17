@@ -70,10 +70,18 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
         $api->get('cart/products', 'CartController@getProducts');
         // 购物车商品添加
         $api->post('cart/products', 'CartController@addProducts');
-        // 购物车商品添加
+        // 购物车商品修改
         $api->put('cart/products', 'CartController@changeProducts');
         // 购物车商品删除
         $api->delete('cart/products', 'CartController@deleteProducts');
+        // 收货地址列表
+        $api->get('user/addresses', 'UserAddressController@index');
+        // 新增收货地址
+        $api->post('user/addresses', 'UserAddressController@store');
+        // 编辑收货地址
+        $api->put('user/addresses/{user_address}', 'UserAddressController@update');
+        // 删除收货地址
+        $api->delete('user/addresses/{user_address}', 'UserAddressController@destroy');
     });
 }
 );
