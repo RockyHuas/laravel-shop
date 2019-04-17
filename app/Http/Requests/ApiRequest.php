@@ -31,5 +31,8 @@ class ApiRequest extends BaseRequest
         'max_price' => 'nullable|string',
         'sort' => 'nullable|integer|in:0,1,2',
         'sort_order' => 'nullable|string|in:asc,desc',
+        'product_id' => 'required|integer',
+        'product_ids' => 'required|string',
+        'amount' => 'required|integer|min:1',
     ];
 }

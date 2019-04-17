@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\ApiRequest;
+use App\Models\Product;
 use App\Repositories\ProductRepo;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -27,6 +28,17 @@ class ProductController extends Controller
         $result = $this->repo->productCatgoryQuery();
 
         return ok($result);
+    }
+
+    /**
+     * 商品详细
+     * @param ApiRequest $request
+     * @param Product $product
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show(ApiRequest $request, Product $product)
+    {
+        return ok($product);
     }
 
     /**
@@ -70,7 +82,7 @@ class ProductController extends Controller
      */
     public function getProducts(ApiRequest $request)
     {
-        [$size,$keywords, $category_id, $brand_id, $min_price, $max_price, $sort, $sort_order] = $request->fields([$this,
+        [$size, $keywords, $category_id, $brand_id, $min_price, $max_price, $sort, $sort_order] = $request->fields([$this,
             'size' => ['default' => 8],
             'keywords',
             'category_id' => ['default' => 0],
@@ -81,7 +93,7 @@ class ProductController extends Controller
             'sort_order'
         ], true);
 
-        $reuslt = $this->repo->productQuery($size,$keywords, $category_id, $brand_id, $min_price, $max_price, $sort, $sort_order);
+        $reuslt = $this->repo->productQuery($size, $keywords, $category_id, $brand_id, $min_price, $max_price, $sort, $sort_order);
 
         return ok($reuslt);
     }

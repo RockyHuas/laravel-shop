@@ -64,6 +64,16 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
         $api->get('product/prices', 'ProductController@getPrices');
         // 商品列表
         $api->get('products', 'ProductController@getProducts');
+        // 商品详细
+        $api->get('products/{product}/detail', 'ProductController@show');
+        // 购物车列表
+        $api->get('cart/products', 'CartController@getProducts');
+        // 购物车商品添加
+        $api->post('cart/products', 'CartController@addProducts');
+        // 购物车商品添加
+        $api->put('cart/products', 'CartController@changeProducts');
+        // 购物车商品删除
+        $api->delete('cart/products', 'CartController@deleteProducts');
     });
 }
 );
