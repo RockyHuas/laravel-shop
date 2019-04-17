@@ -8,6 +8,8 @@ use Illuminate\Support\Str;
 class Ad extends Model
 {
     protected $guarded = ['id'];
+    protected $appends=['image_url','app_image_url'];
+
     // 广告分类
     public function ad_category()
     {

@@ -31,7 +31,19 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
     $api->post('users', 'UserController@store')
         ->name('api.users.store');
 
-    $api->group(['middleware' => ['api.auth','user_active']], function ($api) {
+    // 省份
+    $api->get('area/provinces', 'AreaController@getProvince')
+        ->name('api.area.province');
+
+    // 城市
+    $api->get('area/cities/{china_area}', 'AreaController@getCity')
+        ->name('api.area.city');
+
+    // 地区
+    $api->get('area/districts/{china_area}', 'AreaController@getDistrict')
+        ->name('api.area.district');
+
+    $api->group(['middleware' => ['api.auth', 'user_active']], function ($api) {
         // 文章分类
         $api->get('article/categories', 'HomeController@getArticleCategory');
         // banner
@@ -39,13 +51,19 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
         // 广告
         $api->get('home/ads', 'HomeController@getAds');
         // 推荐首页品牌
-        $api->get('home/ads', 'HomeController@getRecBrands');
+        $api->get('home/brands', 'HomeController@getRecBrands');
         // 推荐商品
         $api->get('home/rec_products', 'HomeController@getRecProducts');
         // 劲爆产品
         $api->get('home/hot_products', 'HomeController@getHotProducts');
         // 产品分类
         $api->get('product/categories', 'ProductController@getCategories');
+        // 产品品牌
+        $api->get('product/brands', 'ProductController@getBrands');
+        // 产品价格
+        $api->get('product/prices', 'ProductController@getPrices');
+        // 商品列表
+        $api->get('products', 'ProductController@getProducts');
     });
 }
 );

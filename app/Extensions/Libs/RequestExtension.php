@@ -61,7 +61,6 @@ final class RequestExtension
         $controller=array_shift($arguments);
         //解析
         $configs = $this->expalinConfigs($arguments);
-
         //验证参数的合法性
         $validate_rules = $this->coverToValidatorRules($configs);
         $data = $controller->validate( $this->request,$validate_rules, $this->request->messages());

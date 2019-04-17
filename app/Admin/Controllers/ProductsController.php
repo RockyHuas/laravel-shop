@@ -221,8 +221,10 @@ class ProductsController extends Controller implements ExcelDataInterface
                 $form->image('app_image', '移动端封面图')->rules('nullable|image');
                 // 价格
                 $form->text('price', '单价')->rules('required|numeric|min:0.01');
-
+                // 库存
                 $form->text('stock', '剩余库存')->rules('required|integer|min:0');
+                // 销量
+                $form->text('sold_count', '销量')->rules('nullable|integer|min:0')->default(0);
                 // 创建一组单选框
                 $form->radio('on_sale', '上架')->options(['1' => '是', '0' => '否'])->default('1');
 

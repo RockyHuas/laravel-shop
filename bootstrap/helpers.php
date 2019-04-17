@@ -10,7 +10,7 @@ if (!function_exists('throw_e')) {
         if ($err instanceof Exception) {
             throw $err;
         } else {
-            throw new Exception($err);
+            throw new Exception($err,$code);
         }
     }
 }

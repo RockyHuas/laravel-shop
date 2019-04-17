@@ -23,10 +23,10 @@ class UserController extends Controller
      */
     public function store(ApiRequest $request)
     {
-        $params = $request->fields([
+        $params = $request->fields([$this,
             'name',
             'phone',
-            'password',
+            'password'=>['rule'=>'required|string|min:6|confirmed'],
             'shop_name',
             'province_id',
             'city_id',

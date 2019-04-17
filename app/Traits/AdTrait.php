@@ -8,7 +8,7 @@ trait AdTrait
 {
 
     /**
-     * Banner 列表
+     * 首页广告
      * @return mixed
      */
     public function adHomeFind()

@@ -30,62 +30,59 @@ class ProductController extends Controller
     }
 
     /**
-     * banner
+     * 获取产品品牌
      * @param ApiRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getBanners(ApiRequest $request)
+    public function getBrands(ApiRequest $request)
     {
-        $result = $this->repo->bannerQuery();
+        [$category_id] = $request->fields([$this,
+            'category_id' => ['default' => 0]
+        ], true);
 
-        return ok($result);
+        $reuslt = $this->repo->productBrandsQuery($category_id);
+
+        return ok($reuslt);
     }
 
     /**
-     * 首页广告
+     * 获取商品价格
      * @param ApiRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getAds(ApiRequest $request)
+    public function getPrices(ApiRequest $request)
     {
-        $result = $this->repo->adHomeFind();
+        [$category_id, $brand_id, $price_num] = $request->fields([$this,
+            'category_id' => ['default' => 0],
+            'brand_id' => ['default' => 0],
+            'price_num' => ['default' => 6],
+        ], true);
 
-        return ok($result);
+        $reuslt = $this->repo->getProductPrices($category_id, $brand_id, $price_num);
+
+        return ok($reuslt);
     }
 
     /**
-     * 推荐首页品牌
+     * 获取产品列表
      * @param ApiRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getRecBrands(ApiRequest $request)
+    public function getProducts(ApiRequest $request)
     {
-        $result = $this->repo->brandQuery(1);
+        [$size,$keywords, $category_id, $brand_id, $min_price, $max_price, $sort, $sort_order] = $request->fields([$this,
+            'size' => ['default' => 8],
+            'keywords',
+            'category_id' => ['default' => 0],
+            'brand_id' => ['default' => 0],
+            'min_price',
+            'max_price',
+            'sort',
+            'sort_order'
+        ], true);
 
-        return ok($result);
-    }
+        $reuslt = $this->repo->productQuery($size,$keywords, $category_id, $brand_id, $min_price, $max_price, $sort, $sort_order);
 
-    /**
-     * 推荐产品
-     * @param ApiRequest $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getRecProducts(ApiRequest $request)
-    {
-        $result = $this->repo->productRecQuery();
-
-        return ok($result);
-    }
-
-    /**
-     * 劲爆产品
-     * @param ApiRequest $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getHotProducts(ApiRequest $request)
-    {
-        $result = $this->repo->productHotQuery();
-
-        return ok($result);
+        return ok($reuslt);
     }
 }

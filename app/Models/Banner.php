@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 class Banner extends Model
 {
     protected $guarded=['id'];
+    protected $appends=['image_url','app_image_url'];
 
     // PC 端图片
     public function getImageUrlAttribute()

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 use Illuminate\Database\Eloquent\Model;
@@ -17,6 +18,7 @@ class Product extends Model
         'images' => 'json',
         'app_images' => 'json'
     ];
+    protected $appends = ['image_url', 'app_image_url', 'images_url', 'app_images_url'];
 
     /**
      * 只查询本地方的产品
@@ -25,10 +27,10 @@ class Product extends Model
      */
     public function scopeCity($query)
     {
-        $user=\Auth::user();
-        return $query->where(function ($query2)use($user){
-            $query2->whereIn('province_id',[0,$user->province_id])
-                ->whereIn('city_id',[0,$user->city_id]);
+        $user = \Auth::user();
+        return $query->where(function ($query2) use ($user) {
+            $query2->whereIn('province', [0, $user->province_id])
+                ->whereIn('city', [0, $user->city_id]);
         });
     }
 
@@ -49,7 +51,7 @@ class Product extends Model
     // PC 端多图片
     public function getImagesUrlAttribute()
     {
-        $images = $this->getAttribute('images');
+        $images = $this->getAttribute('images') ?: Arr::wrap($this->getAttribute('image'));
 
         return collect($images)->map(function ($image) {
             return $this->imageUrLConvert($image);
