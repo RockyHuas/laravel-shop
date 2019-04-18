@@ -74,6 +74,7 @@ class ArticleController extends Controller
             $grid->id('ID')->sortable();
             $grid->title('文章名称');
             $grid->article_category()->title('文章分类');
+            $grid->is_rec('推荐导航')->editable('select', [1 => '是', 0 => '否']);
             $grid->sort('文章排序');
             $grid->created_at('创建时间');
             $grid->actions(function ($actions) {
@@ -124,7 +125,9 @@ class ArticleController extends Controller
             $form->select('article_category_id', '文章分类')->options($article_categories)->rules('required');
             $form->editor('description', '文章详情')->rules('required');
             $form->editor('app_description', '移动端文章详情');
-
+            // 创建一组单选框
+            $form->radio('is_rec', '推荐导航')->options(['1' => '是', '0' => '否'])->default('0');
+            $form->text('nav_sort', '导航排序（数字越小越靠前）')->default(0);
             $form->text('sort', '排序（数字越小越靠前）')->default(0);
         });
     }

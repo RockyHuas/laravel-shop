@@ -19,4 +19,10 @@ class UserAddress extends Model
     {
         return "{$this->province}{$this->city}{$this->district}{$this->address}";
     }
+
+    // 用户收货地址
+    public function user_address()
+    {
+        return $this->hasOne(User::class);
+    }
 }

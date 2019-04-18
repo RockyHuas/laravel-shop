@@ -82,6 +82,22 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
         $api->put('user/addresses/{user_address}', 'UserAddressController@update');
         // 删除收货地址
         $api->delete('user/addresses/{user_address}', 'UserAddressController@destroy');
+        // 设为默认收货地址
+        $api->put('user/addresses/{user_address}/default', 'UserAddressController@setDefault');
+        // 订单列表
+        $api->get('orders', 'OrderController@index');
+        // 提交订单
+        $api->post('orders', 'OrderController@store');
+        // 取消订单
+        $api->delete('orders/{order}', 'OrderController@cancel');
+        // 修改密码
+        $api->put('users/password', 'UserController@changePassword');
+        // 网站设置
+        $api->get('website', 'HomeController@getWebSiteSetting');
+        // 推荐的导航文章
+        $api->get('nav/articles', 'HomeController@getNavArticles');
+        // 支付方式
+        $api->get('payments', 'HomeController@getPayments');
     });
 }
 );

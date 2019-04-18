@@ -34,5 +34,15 @@ class ApiRequest extends BaseRequest
         'product_id' => 'required|integer',
         'product_ids' => 'required|string',
         'amount' => 'required|integer|min:1',
+        'address' => 'required|string',
+        'default' => 'nullable|integer',
+        'province' => 'required|string',
+        'city' => 'required|string',
+        'district' => 'required|string',
+        'user_address_id' => 'required|integer',
+        'products' => 'required|json',
+        'total_amount' => 'required|string|min:0',
+        'order_status' => 'nullable|integer|in:0,1,2,3,4',
+        'old_password' => 'required|string'
     ];
 }

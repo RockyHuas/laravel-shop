@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\ApiRequest;
+use App\Models\Article;
+use App\Models\Pay;
+use App\Models\SystemSetting;
 use App\Repositories\HomeRepo;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -84,6 +87,42 @@ class HomeController extends Controller
     public function getHotProducts(ApiRequest $request)
     {
         $result = $this->repo->productHotQuery();
+
+        return ok($result);
+    }
+
+    /**
+     * 获取系统设置
+     * @param ApiRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getWebSiteSetting(ApiRequest $request)
+    {
+        $result = SystemSetting::whereKey(1)->first();
+
+        return ok($result);
+    }
+
+    /**
+     * 导航文章
+     * @param ApiRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getNavArticles(ApiRequest $request)
+    {
+        $result=Article::where('is_rec',1)->orderBy('nav_sort','asc')->get();
+
+        return ok($result);
+    }
+
+    /**
+     * 获取支付方式
+     * @param ApiRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getPayments(ApiRequest $request)
+    {
+        $result=Pay::get();
 
         return ok($result);
     }
