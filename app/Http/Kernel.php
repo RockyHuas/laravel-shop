@@ -15,6 +15,8 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
+
+
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
@@ -41,8 +43,8 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:60,1',
             'bindings',
-            \App\Http\Middleware\EnableCrossRequestMiddleware::class,
-            \App\Http\Middleware\ProfileJsonResponse::class,
+            'json_format',
+            'cross_request'
         ],
     ];
 
@@ -61,6 +63,8 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'email_verified' => \App\Http\Middleware\CheckIfEmailVerified::class,
-        'user_active'=>UserActive::class
+        'user_active'=>UserActive::class,
+        'json_format'=>\App\Http\Middleware\ProfileJsonResponse::class,
+        'cross_request'=>\App\Http\Middleware\EnableCrossRequestMiddleware::class,
     ];
 }

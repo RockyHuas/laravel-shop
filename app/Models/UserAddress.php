@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserAddress extends Model
 {
-    protected $guarded=['id'];
+    protected $guarded = ['id'];
     protected $dates = ['last_used_at'];
-    protected $appends=['full_Address'];
+    protected $appends = ['full_Address'];
 
     public function user()
     {
