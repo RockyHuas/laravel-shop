@@ -126,4 +126,15 @@ class HomeController extends Controller
 
         return ok($result);
     }
+
+    /**
+     * 文章详情
+     * @param ApiRequest $request
+     * @param Article $article
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getArticleInfo(ApiRequest $request, Article $article)
+    {
+        return ok($article);
+    }
 }

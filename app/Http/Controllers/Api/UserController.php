@@ -26,12 +26,12 @@ class UserController extends Controller
     {
         $params = $request->fields([$this,
             'name',
-            'phone',
-            'password' => ['rule' => 'required|string|min:6|confirmed'],
             'shop_name',
+            'phone',
             'province_id',
             'city_id',
-            'district_id'
+            'district_id',
+            'password' => ['rule' => 'required|string|min:6|confirmed']
         ]);
 
         $result = $this->repo->userCreate($params);
@@ -58,5 +58,32 @@ class UserController extends Controller
         $user->update(['password' => bcrypt($password)]);
 
         return ok(true);
+    }
+
+    /**
+     * 获取用户信息
+     * @param ApiRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getUserInfo(ApiRequest $request)
+    {
+        $user = \Auth::user();
+
+        $user->addHidden('password');
+
+        return ok($user);
+    }
+
+    public function updatePassword(ApiRequest $request)
+    {
+        [$name,$phone,$password] = $request->fields([$this,
+            'name',
+            'phone',
+            'password' => ['rule' => 'required|string|min:6|confirmed']
+        ],true);
+
+        $result = $this->repo->userPasswordUpdate($name,$phone,$password);
+
+        return ok($result);
     }
 }
