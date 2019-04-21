@@ -15,6 +15,7 @@ trait ProductTrait
     {
         return Product::City()
             ->where('is_rec', 1)
+            ->where('on_sale',1)
             ->orderBy('sort', 'ASC')->get();
     }
 
@@ -26,6 +27,7 @@ trait ProductTrait
     {
         return Product::City()
             ->where('is_hot', 1)
+            ->where('on_sale',1)
             ->orderBy('sort', 'ASC')->get();
     }
 
@@ -37,6 +39,7 @@ trait ProductTrait
     public function productBrandsQuery(int $category_id = 0)
     {
         return Product::City()->with('brand')
+            ->where('on_sale',1)
             ->when($category_id, function ($query, $value) {
                 $query->whereCategoryId($value);
             })->get()
@@ -54,6 +57,7 @@ trait ProductTrait
     public function productPricesQuery(int $category_id = 0, int $brand_id = 0)
     {
         return Product::City()
+            ->where('on_sale',1)
             ->when($category_id, function ($query, $value) {
                 $query->whereCategoryId($value);
             })->when($brand_id, function ($query, $value) {
@@ -78,6 +82,7 @@ trait ProductTrait
                                  string $max_price = '', int $sort = 0, string $sort_order = 'asc')
     {
         return Product::City()
+            ->where('on_sale',1)
             ->when($keywords, function ($query, $value) {
                 $query->where('title', 'like', "%{$value}%");
             })

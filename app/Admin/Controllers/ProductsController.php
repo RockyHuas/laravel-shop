@@ -101,7 +101,7 @@ class ProductsController extends Controller implements ExcelDataInterface
             $grid->stock('剩余库存')->editable('textarea');
             $grid->on_sale('已上架')->editable('select', [1 => '是', 0 => '否']);
             $grid->is_hot('热卖产品')->editable('select', [1 => '是', 0 => '否']);
-            $grid->is_rec('劲爆推荐')->editable('select', [1 => '是', 0 => '否']);
+            $grid->is_rec('推荐产品')->editable('select', [1 => '是', 0 => '否']);
             $grid->sort('排序')->editable('textarea');;
 
             $grid->actions(function ($actions) {
@@ -162,7 +162,7 @@ class ProductsController extends Controller implements ExcelDataInterface
                 ]);
 
                 // 过滤劲爆
-                $filter->equal('is_rec', '是否劲爆推荐')->radio([
+                $filter->equal('is_rec', '是否推荐')->radio([
                     '' => '所有',
                     1 => '是',
                     0 => '否',
@@ -260,7 +260,7 @@ class ProductsController extends Controller implements ExcelDataInterface
 
                 $form->radio('is_hot', '热卖产品')->options(['1' => '是', '0' => '否'])->default('0');
 
-                $form->radio('is_rec', '推荐首页')->options(['1' => '是', '0' => '否'])->default('0');
+                $form->radio('is_rec', '推荐产品')->options(['1' => '是', '0' => '否'])->default('0');
 
                 $form->text('sort', '排序（数字越小越靠前）')->default(0);
             });
