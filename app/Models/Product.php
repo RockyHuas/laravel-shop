@@ -37,7 +37,7 @@ class Product extends Model
     // PC 端图片
     public function getImageUrlAttribute()
     {
-        return $this->imageUrLConvert($this->attributes['image']);
+        return $this->attributes['image'] ? $this->imageUrLConvert($this->attributes['image']) : null;
     }
 
     // 移动端图片
@@ -45,7 +45,7 @@ class Product extends Model
     {
         return $this->attributes['app_image']
             ? $this->imageUrLConvert($this->attributes['app_image'])
-            : $this->imageUrLConvert($this->attributes['image']);
+            : $this->getImageUrlAttribute();
     }
 
     // PC 端多图片
@@ -54,7 +54,7 @@ class Product extends Model
         $images = $this->getAttribute('images') ?: Arr::wrap($this->getAttribute('image'));
 
         return collect($images)->map(function ($image) {
-            return $this->imageUrLConvert($image);
+            return $image ? $this->imageUrLConvert($image) : null;
         });
     }
 
@@ -76,8 +76,9 @@ class Product extends Model
      * @param string $url
      * @return string
      */
-    protected function imageUrLConvert(string $url)
+    protected function imageUrLConvert($url)
     {
+        if (!$url) return $url;
         // 如果 image 字段本身就已经是完整的 url 就直接返回
         if (Str::startsWith($url, ['http://', 'https://'])) {
             return $url;

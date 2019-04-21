@@ -33,8 +33,9 @@ class SystemSetting extends Model
      * @param string $url
      * @return string
      */
-    protected function imageUrLConvert(string $url)
+    protected function imageUrLConvert($url)
     {
+        if (!$url) return $url;
         // 如果 image 字段本身就已经是完整的 url 就直接返回
         if (Str::startsWith($url, ['http://', 'https://'])) {
             return $url;

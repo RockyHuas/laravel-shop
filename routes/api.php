@@ -27,6 +27,10 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
     $api->post('authorizations', 'AuthorizationController@store')
         ->name('api.authorizations.store');
 
+    // 忘记密码
+    $api->patch('users', 'UserController@updatePassword')
+        ->name('api.users.update.password');
+
     // 用户注册
     $api->post('users', 'UserController@store')
         ->name('api.users.store');
@@ -42,6 +46,9 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
     // 地区
     $api->get('area/districts/{china_area}', 'AreaController@getDistrict')
         ->name('api.area.district');
+
+    // 网站设置
+    $api->get('website', 'HomeController@getWebSiteSetting');
 
     $api->group(['middleware' => ['api.auth', 'user_active']], function ($api) {
         // 文章分类
@@ -92,10 +99,13 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
         $api->delete('orders/{order}', 'OrderController@cancel');
         // 修改密码
         $api->put('users/password', 'UserController@changePassword');
-        // 网站设置
-        $api->get('website', 'HomeController@getWebSiteSetting');
+        // 获取用户信息
+        $api->get('users/me', 'UserController@getUserInfo');
+
         // 推荐的导航文章
         $api->get('nav/articles', 'HomeController@getNavArticles');
+        // 文章详情
+        $api->get('articles/{article}', 'HomeController@getArticleInfo');
         // 支付方式
         $api->get('payments', 'HomeController@getPayments');
     });
