@@ -38,6 +38,7 @@ class ProductController extends Controller
      */
     public function show(ApiRequest $request, Product $product)
     {
+        $product->loadMissing(['brand', 'category']);
         return ok($product);
     }
 
