@@ -196,6 +196,7 @@ class ProductsController extends Controller implements ExcelDataInterface
             $form->tab('商品基本信息', function ($form) use ($user) {
                 // 创建一个输入框，第一个参数 title 是模型的字段名，第二个参数是该字段描述
                 $form->text('title', '商品名称')->rules('required');
+                $form->text('summary', '商品简介');
                 // 商品分类
                 $categories = Category::get(['id', DB::raw('title as text')])->when($user->category_id, function ($items, $value) {
                     return $items->filter(function ($item) use ($value) {
