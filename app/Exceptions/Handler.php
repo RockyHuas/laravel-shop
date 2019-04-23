@@ -15,6 +15,7 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 class Handler extends ExceptionHandler
 {
@@ -122,6 +123,15 @@ class Handler extends ExceptionHandler
             ]);
         } elseif ($exception instanceof UnauthorizedHttpException) {
             if ($exception->getPrevious() instanceof TokenExpiredException) {
+                return response()->json([
+                    'code' => 401,
+                    'data' => null,
+                    'message' => 'Token 已过期，请重新登录',
+                    'error' => $exception->getTraceAsString(),
+                    'file' => $exception->getFile() . ':' . $exception->getLine()
+                ]);
+            }
+            if ($exception->getPrevious() instanceof TokenInvalidException) {
                 return response()->json([
                     'code' => 401,
                     'data' => null,
