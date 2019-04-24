@@ -24,9 +24,9 @@ trait UserAddressTrait
     {
         // 判断地址是否存在
         throw_on(UserAddress::where([
-            'province'=>array_get($data,'province'),
-            'city'=>array_get($data,'city'),
-            'district'=>array_get($data,'district'),
+            'province_id'=>array_get($data,'province_id'),
+            'city_id'=>array_get($data,'city_id'),
+            'district_id'=>array_get($data,'district_id'),
             'address'=>array_get($data,'address'),
             'contact_name'=>array_get($data,'name'),
             'contact_phone'=>array_get($data,'phone'),
@@ -35,9 +35,9 @@ trait UserAddressTrait
 
         // 开始新增
         $user_address=UserAddress::create([
-            'province'=>array_get($data,'province'),
-            'city'=>array_get($data,'city'),
-            'district'=>array_get($data,'district'),
+            'province_id'=>array_get($data,'province_id'),
+            'city_id'=>array_get($data,'city_id'),
+            'district_id'=>array_get($data,'district_id'),
             'address'=>array_get($data,'address'),
             'contact_name'=>array_get($data,'name'),
             'contact_phone'=>array_get($data,'phone'),
@@ -62,9 +62,9 @@ trait UserAddressTrait
     {
         // 判断地址是否存在
         throw_on(UserAddress::where([
-            'province'=>array_get($data,'province'),
-            'city'=>array_get($data,'city'),
-            'district'=>array_get($data,'district'),
+            'province_id'=>array_get($data,'province_id'),
+            'city_id'=>array_get($data,'city_id'),
+            'district_id'=>array_get($data,'district_id'),
             'address'=>array_get($data,'address'),
             'contact_name'=>array_get($data,'name'),
             'contact_phone'=>array_get($data,'phone'),
@@ -73,9 +73,9 @@ trait UserAddressTrait
 
         // 开始新增
        $user_address->update([
-            'province'=>array_get($data,'province'),
-            'city'=>array_get($data,'city'),
-            'district'=>array_get($data,'district'),
+            'province_id'=>array_get($data,'province_id'),
+            'city_id'=>array_get($data,'city_id'),
+            'district_id'=>array_get($data,'district_id'),
             'address'=>array_get($data,'address'),
             'contact_name'=>array_get($data,'name'),
             'contact_phone'=>array_get($data,'phone'),

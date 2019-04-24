@@ -15,13 +15,12 @@ class OrderRepo
     {
         return \DB::transaction(function () use ($user_address_id, $products, $total_amount) {
             // 获取地址
-            $address = UserAddress::whereKey($user_address_id)->firstOrFail();
-
+            $address = UserAddress::with(['province','city','district'])->whereKey($user_address_id)->firstOrFail();
             // 创建订单
             $order = Order::create([
                 'user_id' => \Auth::id(),
                 'address' => [
-                    'address' => $address['province'] . ' ' . $address['city'] . ' ' . $address['district'] . ' ' . $address['address'],
+                    'address' =>$address->province->name . ' ' . $address->city->name . ' ' . $address->district->name . ' ' . $address['address'],
                     'contact_name' => $address['contact_name'],
                     'contact_phone' => $address['contact_phone'],
                 ],

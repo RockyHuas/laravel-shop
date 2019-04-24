@@ -38,9 +38,9 @@ class UserAddressController extends Controller
     public function store(ApiRequest $request, UserAddress $user_address)
     {
         $params = $request->fields([$this,
-            'province',
-            'city',
-            'district',
+            'province_id',
+            'city_id',
+            'district_id',
             'address',
             'name',
             'phone',
@@ -61,9 +61,9 @@ class UserAddressController extends Controller
     public function update(ApiRequest $request, UserAddress $user_address)
     {
         $params = $request->fields([$this,
-            'province',
-            'city',
-            'district',
+            'province_id',
+            'city_id',
+            'district_id',
             'address',
             'name',
             'phone',
