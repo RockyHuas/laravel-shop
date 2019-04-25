@@ -97,6 +97,8 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
         $api->post('orders', 'OrderController@store');
         // 取消订单
         $api->delete('orders/{order}', 'OrderController@cancel');
+        // 订单详情
+        $api->get('orders/{order}', 'OrderController@show');
         // 修改密码
         $api->put('users/password', 'UserController@changePassword');
         // 获取用户信息

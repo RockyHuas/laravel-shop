@@ -68,5 +68,17 @@ class OrderController extends Controller
         return ok(true);
     }
 
+    /**
+     * @param ApiRequest $request
+     * @param Order $order
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show(ApiRequest $request, Order $order)
+    {
+        throw_on($order->user_id != \Auth::id(), '非法操作');
 
+        $order->loadMissing('items.product');
+
+        return ok($order);
+    }
 }
