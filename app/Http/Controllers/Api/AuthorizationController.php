@@ -23,9 +23,21 @@ class AuthorizationController extends Controller
      */
     public function store(ApiRequest $request)
     {
-        [$name, $password] = $request->fields([$this,'name', 'password'],true);
+        [$name, $password] = $request->fields([$this, 'name', 'password'], true);
 
         $result = $this->repo->login($name, $password);
+
+        return ok($result);
+    }
+
+    /**
+     * 退出登录
+     * @param ApiRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(ApiRequest $request)
+    {
+        $result = $this->repo->delete_token();
 
         return ok($result);
     }

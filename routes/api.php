@@ -27,6 +27,8 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
     $api->post('authorizations', 'AuthorizationController@store')
         ->name('api.authorizations.store');
 
+
+
     // 忘记密码
     $api->patch('users', 'UserController@updatePassword')
         ->name('api.users.update.password');
@@ -49,6 +51,12 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
 
     // 网站设置
     $api->get('website', 'HomeController@getWebSiteSetting');
+
+    $api->group(['middleware' => ['api.auth']], function ($api) {
+        // 删除token
+        $api->delete('authorizations/current', 'AuthorizationController@destroy')
+            ->name('api.authorization.destroy');
+    });
 
     $api->group(['middleware' => ['api.auth', 'user_active']], function ($api) {
         // 文章分类
@@ -93,10 +101,14 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
         $api->put('user/addresses/{user_address}/default', 'UserAddressController@setDefault');
         // 订单列表
         $api->get('orders', 'OrderController@index');
+        // 订单统计
+        $api->get('orders/status/stat', 'OrderController@stat');
         // 提交订单
         $api->post('orders', 'OrderController@store');
         // 取消订单
         $api->delete('orders/{order}', 'OrderController@cancel');
+        // 确认收获
+        $api->patch('orders/{order}/confirm', 'OrderController@confirm');
         // 订单详情
         $api->get('orders/{order}', 'OrderController@show');
         // 修改密码

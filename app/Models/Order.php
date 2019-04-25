@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Ramsey\Uuid\Uuid;
 
 class Order extends Model
@@ -32,6 +33,7 @@ class Order extends Model
     ];
 
     protected $guarded = ['id'];
+    protected $appends = ['shipping_status', 'paid_status', 'created_time', 'number_status'];
 
     protected $casts = [
         'closed' => 'boolean',
@@ -114,4 +116,32 @@ class Order extends Model
 
         return $no;
     }
+
+    public function getShippingStatusAttribute()
+    {
+        return static::$shipStatusMap[$this->ship_status];
+    }
+
+    public function getPaidStatusAttribute()
+    {
+        return $this->paid_at ? '已支付' : ($this->closed ? '已取消' : '未支付');
+    }
+
+    public function getCreatedTimeAttribute()
+    {
+        return $this->created_at->toDateString();
+    }
+
+    public function getNumberStatusAttribute()
+    {
+        $status = 0;
+        if (!$this->paid_at && $this->closed == 0) $status = 1; // 待支付
+        if ($this->paid_at && $this->closed == 0 && $this->ship_status == static::SHIP_STATUS_PENDING) $status = 2; // 待发货
+        if ($this->paid_at && $this->closed == 0 && $this->ship_status == static::SHIP_STATUS_DELIVERED) $status = 3; // 已发货
+        if ($this->paid_at && $this->closed == 0 && $this->ship_status == static::SHIP_STATUS_RECEIVED) $status = 4; // 已完成
+        if ($this->closed == 1) $status = 5; // 已取消
+
+        return $status;
+    }
+
 }

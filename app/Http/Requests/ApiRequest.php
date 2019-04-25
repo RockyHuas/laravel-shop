@@ -42,7 +42,7 @@ class ApiRequest extends BaseRequest
         'user_address_id' => 'required|integer',
         'products' => 'required|json',
         'total_amount' => 'required|string|min:0',
-        'order_status' => 'nullable|integer|in:0,1,2,3,4',
+        'order_status' => 'nullable|integer|in:0,1,2,3,4,5',
         'old_password' => 'required|string'
     ];
 }

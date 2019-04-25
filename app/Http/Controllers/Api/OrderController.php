@@ -35,6 +35,17 @@ class OrderController extends Controller
     }
 
     /**
+     * 统计订单状态
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function stat()
+    {
+        $result=$this->repo->statByStatus();
+
+        return ok($result);
+    }
+
+    /**
      * 创建新的订单
      * @param ApiRequest $request
      * @param Order $order
@@ -64,6 +75,23 @@ class OrderController extends Controller
         throw_on($order->user_id != \Auth::id(), '您不能取消他人的订单');
 
         $order->update(['closed' => 1]);
+
+        return ok(true);
+    }
+
+    /**
+     * 确认收货
+     * @param ApiRequest $request
+     * @param Order $order
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function confirm(ApiRequest $request, Order $order)
+    {
+        throw_on($order->user_id != \Auth::id(), '您不能操作他人的订单');
+
+        throw_on(!($order->paid_at && $order->ship_status==Order::SHIP_STATUS_DELIVERED),'非法操作');
+
+        $order->update(['ship_status' => Order::SHIP_STATUS_RECEIVED]);
 
         return ok(true);
     }
