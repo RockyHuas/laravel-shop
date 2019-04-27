@@ -9,6 +9,7 @@ class TestController extends Controller
 {
     public function index()
     {
-        throw_on(true,'23424');
+        broadcast(new \App\Events\ExampleEvent);
+        dd(1);
     }
 }

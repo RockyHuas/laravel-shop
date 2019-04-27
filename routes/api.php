@@ -15,10 +15,13 @@ use Illuminate\Http\Request;
 
 $api = app('Dingo\Api\Routing\Router');
 
+
 // 客户端接口
 $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => ['api', 'bindings']], function ($api) {
 
     $api->get('test', 'TestController@index');
+
+    $api->get('wechat/scan', 'WeChatController@scanUrl');
 
     $api->post('images', 'ImageController@store')
         ->name('api.images.store');
