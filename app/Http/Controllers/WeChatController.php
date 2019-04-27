@@ -12,7 +12,7 @@ class WeChatController extends Controller
     public function serve()
     {
         $app = app('wechat.official_account');
-
+        Log::info('进入 serve：');
         $app->server->push(function ($message) {
             if ($message['Event'] === 'SCAN') {
                 Log::info('进入：' . $message);
