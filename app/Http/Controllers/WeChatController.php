@@ -15,7 +15,7 @@ class WeChatController extends Controller
         Log::info('进入 serve：');
         $app->server->push(function ($message) {
             if ($message['Event'] === 'SCAN') {
-                Log::info('进入：' . $message);
+                Log::info('进入：' . json_encode($message));
                 // 获取用户的 $openid
                 $openid = $message['FromUserName'];
                 Log::info('open_id：' . $openid);
@@ -34,7 +34,7 @@ class WeChatController extends Controller
                 } else { // 用户不存在,返回 open_id
                     Log::info('用户不存在，创建');
                     event(new WechatScanLogin($openid));
-                    return '登录成功！';
+                    return '请绑定用户';
                 }
             } else {
                 return true;
