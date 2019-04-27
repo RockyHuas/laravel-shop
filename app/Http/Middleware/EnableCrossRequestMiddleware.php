@@ -32,7 +32,7 @@ class EnableCrossRequestMiddleware
         $origin = $request->server('HTTP_ORIGIN') ? $request->server('HTTP_ORIGIN') : '';
         $match = preg_match('/htwig\.com$/', $origin);
         $allow_origin = config('services.cros_service.allow_origin');
-        if (($match || in_array($origin, $allow_origin) || empty($allow_origin))&& $response instanceof \Dingo\Api\Http\Response) {
+        if (($match || in_array($origin, $allow_origin) || empty($allow_origin))&& method_exists($response,'header')) {
             $response->header('Access-Control-Allow-Origin', $origin);
             $response->header('Access-Control-Allow-Headers', config('services.cros_service.allow_headers'));
             $response->header('Access-Control-Expose-Headers', config('services.cros_service.expose_headers'));
