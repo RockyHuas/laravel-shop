@@ -28,7 +28,6 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
         ->name('api.authorizations.store');
 
 
-
     // 忘记密码
     $api->patch('users', 'UserController@updatePassword')
         ->name('api.users.update.password');
@@ -57,10 +56,17 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
         $api->delete('authorizations/current', 'AuthorizationController@destroy')
             ->name('api.authorization.destroy');
     });
+    // 推荐的导航文章
+    $api->get('nav/articles', 'HomeController@getNavArticles');
+
+    // 文章分类
+    $api->get('article/categories', 'HomeController@getArticleCategory');
+
+    // 产品分类
+    $api->get('product/categories', 'ProductController@getCategories');
 
     $api->group(['middleware' => ['api.auth', 'user_active']], function ($api) {
-        // 文章分类
-        $api->get('article/categories', 'HomeController@getArticleCategory');
+
         // banner
         $api->get('banners', 'HomeController@getBanners');
         // 广告
@@ -71,8 +77,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
         $api->get('home/rec_products', 'HomeController@getRecProducts');
         // 劲爆产品
         $api->get('home/hot_products', 'HomeController@getHotProducts');
-        // 产品分类
-        $api->get('product/categories', 'ProductController@getCategories');
+
         // 产品品牌
         $api->get('product/brands', 'ProductController@getBrands');
         // 产品价格
@@ -116,8 +121,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
         // 获取用户信息
         $api->get('users/me', 'UserController@getUserInfo');
 
-        // 推荐的导航文章
-        $api->get('nav/articles', 'HomeController@getNavArticles');
+
         // 文章详情
         $api->get('articles/{article}', 'HomeController@getArticleInfo');
         // 支付方式
