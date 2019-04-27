@@ -10,6 +10,5 @@ class TestController extends Controller
     public function index()
     {
         broadcast(new \App\Events\ExampleEvent);
-        dd(1);
     }
 }
