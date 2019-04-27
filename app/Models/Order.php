@@ -117,9 +117,15 @@ class Order extends Model
         return $no;
     }
 
+    /**
+     * 发货状态
+     * @return mixed
+     */
     public function getShippingStatusAttribute()
     {
-        return static::$shipStatusMap[$this->ship_status];
+        if ($this->ship_status) {
+            return static::$shipStatusMap[$this->ship_status];
+        }
     }
 
     public function getPaidStatusAttribute()
