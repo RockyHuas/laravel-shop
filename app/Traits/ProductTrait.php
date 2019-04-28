@@ -84,7 +84,8 @@ trait ProductTrait
         return Product::City()
             ->where('on_sale',1)
             ->when($keywords, function ($query, $value) {
-                $query->where('title', 'like', "%{$value}%");
+                $query->where('search_title', 'like', "%".
+                    trim(str_replace(' ', '', $value))."%");
             })
             ->when($category_id, function ($query, $value) {
                 $query->whereCategoryId($value);

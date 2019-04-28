@@ -20,6 +20,17 @@ class Product extends Model
     ];
     protected $appends = ['image_url', 'app_image_url', 'images_url', 'app_images_url'];
 
+    protected static function boot()
+    {
+        parent::boot();
+        // 监听模型创建事件，在写入数据库之前触发
+        static::saving(function ($model) {
+            if ($model->title) {
+                $model->search_title = trim(str_replace(' ', '', $model->title));
+            }
+        });
+    }
+
     /**
      * 只查询本地方的产品
      * @param $query
