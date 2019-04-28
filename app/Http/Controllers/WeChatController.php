@@ -30,11 +30,11 @@ class WeChatController extends Controller
                     event(new WechatScanLogin($openid,'Bearer ' . $token));
 
                     Log::info('登录成功了');
-                    return '登录成功！';
+                    return '扫码成功！';
                 } else { // 用户不存在,返回 open_id
                     Log::info('用户不存在，创建');
                     event(new WechatScanLogin($openid));
-                    return '请绑定用户';
+                    return '扫码成功';
                 }
             } else {
                 return true;
