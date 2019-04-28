@@ -96,7 +96,13 @@ class ProductsController extends Controller implements ExcelDataInterface
             $grid->id('ID')->sortable();
             $grid->title('商品名称')->editable('textarea');
             $grid->image('商品图片')->image(\Storage::disk('public')->url('/'), 50, 50);
-
+            $grid->column('地区')->display(function () {
+                $province = '';
+                $this->province && $province = ChinaArea::whereKey($this->province)->first();
+                $city = '';
+                $this->city && $city = ChinaArea::whereKey($this->city)->first();
+                return ($province ? $province->name : '全国') . ($city ? $city->name : '全部地区');
+            });
             $grid->price('价格')->editable('textarea');
             $grid->stock('剩余库存')->editable('textarea');
             $grid->on_sale('已上架')->editable('select', [1 => '是', 0 => '否']);
