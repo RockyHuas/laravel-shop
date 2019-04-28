@@ -37,13 +37,18 @@ Route::group([
     $router->get('products/down', 'ProductsController@downIndex');
     // 产品创建
     $router->get('products/create', 'ProductsController@create');
+    $router->get('products/down/create', 'ProductsController@create');
     $router->post('products', 'ProductsController@store');
+    $router->post('products/down', 'ProductsController@store');
     // 产品删除
     $router->delete('products/{id}', 'ProductsController@delete');
+    $router->delete('products/down/{id}', 'ProductsController@delete');
     // 产品详情
     $router->get('products/{id}/edit', 'ProductsController@edit');
+    $router->get('products/down/{id}/edit', 'ProductsController@edit');
     // 产品更新
     $router->put('products/{id}', 'ProductsController@update');
+    $router->put('products/down/{id}', 'ProductsController@update');
 
     // 产品分类列表
     $router->get('product/categories', 'ProductCategoryController@index')->name('admin.product.category.index');
