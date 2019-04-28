@@ -41,6 +41,14 @@ class ProductsController extends Controller implements ExcelDataInterface
         });
     }
 
+    public function downIndex()
+    {
+        return Admin::content(function (Content $content) {
+            $content->header('商品列表');
+            $content->body($this->downGrid());
+        });
+    }
+
     /**
      * Edit interface.
      *
@@ -144,6 +152,7 @@ class ProductsController extends Controller implements ExcelDataInterface
             $user = Admin::user();
 
             $grid->model()->orderBy('id', 'desc');
+            $grid->model()->where('on_sale', 1);
 
             // 如果选择了品牌只能更新某个品牌的产品
             if ($user->brand_id) {
@@ -188,6 +197,73 @@ class ProductsController extends Controller implements ExcelDataInterface
                     1 => '是',
                     0 => '否',
                 ]);
+
+                $filter->in('province', '产品所属省份')->multipleSelect('/admin/area/province')->load('city', '/admin/area/city');
+
+                $filter->in('city', '产品所属地区')->multipleSelect('/admin/area/city');
+            });
+
+        });
+    }
+
+    protected function downGrid()
+    {
+        return Admin::grid(Product::class, function (Grid $grid) {
+            $grid->id('ID')->sortable();
+            $grid->title('商品名称')->editable('textarea');
+            $grid->image('商品图片')->image(\Storage::disk('public')->url('/'), 50, 50);
+            $grid->column('地区')->display(function () {
+                $province = '';
+                $this->province && $province = ChinaArea::whereKey($this->province)->first();
+                $city = '';
+                $this->city && $city = ChinaArea::whereKey($this->city)->first();
+                return ($province ? $province->name : '全国') . ($city ? $city->name : '全部地区');
+            });
+            $grid->price('价格')->editable('textarea');
+            $grid->stock('剩余库存')->editable('textarea');
+            $grid->on_sale('已上架')->editable('select', [1 => '是', 0 => '否']);
+            $grid->is_hot('热卖产品')->editable('select', [1 => '是', 0 => '否']);
+            $grid->is_rec('推荐产品')->editable('select', [1 => '是', 0 => '否']);
+            $grid->sort('排序')->editable('textarea');;
+
+            $grid->actions(function ($actions) {
+                $actions->disableView();
+
+            });
+
+
+            // 导出商品
+            $grid->exporter(new ExcelExpoter($this));
+
+            // 默认过滤条件
+            $user = Admin::user();
+
+            $grid->model()->orderBy('id', 'desc');
+            $grid->model()->where('on_sale', 0);
+
+            // 如果选择了品牌只能更新某个品牌的产品
+            if ($user->brand_id) {
+                $grid->model()->where('brand_id', $user->brand_id);
+            }
+            if ($user->category_id) {
+                $grid->model()->where('category_id', $user->category_id);
+            }
+
+            if ($user->province) {
+                $grid->model()->where('province', $user->province);
+            }
+
+            if ($user->city) {
+                $grid->model()->where('city', $user->city);
+            }
+
+            $grid->filter(function ($filter) {
+
+                // 去掉默认的id过滤器
+                $filter->disableIdFilter();
+
+                // 添加标题过滤
+                $filter->like('title', '商品名称');
 
                 $filter->in('province', '产品所属省份')->multipleSelect('/admin/area/province')->load('city', '/admin/area/city');
 

@@ -33,6 +33,8 @@ Route::group([
 
     // 产品列表
     $router->get('products', 'ProductsController@index')->name('admin.products.index');
+    // 下架产品列表
+    $router->get('products/down', 'ProductsController@downIndex');
     // 产品创建
     $router->get('products/create', 'ProductsController@create');
     $router->post('products', 'ProductsController@store');
