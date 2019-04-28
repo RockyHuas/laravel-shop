@@ -39,8 +39,10 @@ class AuthorizationsRepo
         throw_on(!$token, '用户名或者密码错误');
 
         if ($open_id) {
+            throw_on(User::whereOpenId($open_id)->first(), '该微信已被绑定');
             $user = Auth::guard('api')->getProvider()
                 ->retrieveByCredentials($credentials);
+
             $user->update(['open_id' => $open_id]);
         }
 

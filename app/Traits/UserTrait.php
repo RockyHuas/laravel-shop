@@ -19,7 +19,8 @@ trait UserTrait
 
         // 密码字段加密
         $insert_data['password'] = bcrypt($insert_data['password']);
-
+        $open_id=array_get($data,'open_id');
+        throw_on($open_id && User::whereOpenId($open_id)->first(), '该微信已被绑定');
         throw_on(!$insert_data['province_id'] || !$insert_data['city_id'], '地区不能为空');
         // 判断用户名是否重复
         throw_on(User::whereName($insert_data['name'])->first(), '用户名重复');

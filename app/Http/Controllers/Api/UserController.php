@@ -101,7 +101,9 @@ class UserController extends Controller
 
         $user = \Auth::user();
 
-        $user->update(['open_id'=>$open_id]);
+        throw_on($user->open_id == $open_id, '该微信已被绑定');
+
+        $user->update(['open_id' => $open_id]);
 
         return ok($user);
     }
