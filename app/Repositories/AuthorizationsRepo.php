@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\User;
 use Auth;
 
 class AuthorizationsRepo
@@ -14,7 +15,7 @@ class AuthorizationsRepo
      * @param string $password
      * @return array
      */
-    public function login(string $name, string $password)
+    public function login(string $name, string $password,string $open_id='')
     {
         // 组装参数
         $credentials = compact('name', 'password');
@@ -30,6 +31,13 @@ class AuthorizationsRepo
 
         // 如果不存在 token，则用户名或者密码错误
         throw_on(!$token, '用户名或者密码错误');
+
+        if($open_id){
+            $user=User::where(function ($query)use($name){
+                $query->where('name',$name)->orWhere('phone',$name);
+            })->where('password',bcrypt($password))->first();
+            $user->update(['open_id'=>$open_id]);
+        }
 
         return $this->returnWithToken($token);
     }

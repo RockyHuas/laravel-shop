@@ -15,7 +15,7 @@ trait UserTrait
     {
         // 过滤非法字段
         $insert_data = array_only($data, ['name', 'phone', 'password', 'shop_name',
-            'province_id', 'city_id', 'district_id']);
+            'province_id', 'city_id', 'district_id','open_id']);
 
         // 密码字段加密
         $insert_data['password'] = bcrypt($insert_data['password']);

@@ -31,7 +31,8 @@ class UserController extends Controller
             'province_id',
             'city_id',
             'district_id',
-            'password' => ['rule' => 'required|string|min:6|confirmed']
+            'password' => ['rule' => 'required|string|min:6|confirmed'],
+            'open_id'
         ]);
 
         $result = $this->repo->userCreate($params);
@@ -76,14 +77,32 @@ class UserController extends Controller
 
     public function updatePassword(ApiRequest $request)
     {
-        [$name,$phone,$password] = $request->fields([$this,
+        [$name, $phone, $password] = $request->fields([$this,
             'name',
             'phone',
             'password' => ['rule' => 'required|string|min:6|confirmed']
-        ],true);
+        ], true);
 
-        $result = $this->repo->userPasswordUpdate($name,$phone,$password);
+        $result = $this->repo->userPasswordUpdate($name, $phone, $password);
 
         return ok($result);
+    }
+
+    /**
+     * 绑定微信
+     * @param ApiRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function bindWeChat(ApiRequest $request)
+    {
+        [$open_id] = $request->fields([$this,
+            'open_id' => ['rule' => 'required|string']
+        ], true);
+
+        $user = \Auth::user();
+
+        $user->update(['open_id'=>$open_id]);
+
+        return ok($user);
     }
 }

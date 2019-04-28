@@ -123,6 +123,8 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
         $api->put('users/password', 'UserController@changePassword');
         // 获取用户信息
         $api->get('users/me', 'UserController@getUserInfo');
+        // 绑定微信
+        $api->patch('users/bind', 'UserController@bindWeChat');
 
 
         // 文章详情

@@ -23,9 +23,9 @@ class AuthorizationController extends Controller
      */
     public function store(ApiRequest $request)
     {
-        [$name, $password] = $request->fields([$this, 'name', 'password'], true);
+        [$name, $password,$open_id] = $request->fields([$this, 'name', 'password','open_id'], true);
 
-        $result = $this->repo->login($name, $password);
+        $result = $this->repo->login($name, $password,$open_id);
 
         return ok($result);
     }
