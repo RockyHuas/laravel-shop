@@ -15,7 +15,7 @@ class AuthorizationsRepo
      * @param string $password
      * @return array
      */
-    public function login(string $name, string $password,string $open_id='')
+    public function login(string $name, string $password, string $open_id = '')
     {
         // 组装参数
         $credentials = compact('name', 'password');
@@ -27,16 +27,21 @@ class AuthorizationsRepo
         $token = Auth::guard('api')->attempt($credentials);
 
         // 如果 token 不存在，尝试通过手机号码登录
-        !$token && $token=Auth::guard('api')->attempt(['phone'=>$name,'password'=>$password]);
+        if (!$token) {
+            $credentials = [
+                'phone' => $name,
+                'password' => $password
+            ];
+            $token = Auth::guard('api')->attempt($credentials);
+        }
 
         // 如果不存在 token，则用户名或者密码错误
         throw_on(!$token, '用户名或者密码错误');
 
-        if($open_id){
-            $user=User::where(function ($query)use($name){
-                $query->where('name',$name)->orWhere('phone',$name);
-            })->where('password',bcrypt($password))->first();
-            $user->update(['open_id'=>$open_id]);
+        if ($open_id) {
+            $user = Auth::guard('api')->getProvider()
+                ->retrieveByCredentials($credentials);
+            $user->update(['open_id' => $open_id]);
         }
 
         return $this->returnWithToken($token);
