@@ -80,9 +80,21 @@ class ProductsController extends Controller implements ExcelDataInterface
 
     public function exportData($data)
     {
-        return $data->map(function ($order) {
-            return array_only($order, ['id', 'title', 'price', 'stock', 'sort']);
-        })->prepend(['商品ID', '商品名称', '商品价格', '商品库存', '商品排序']);
+        return $data->map(function ($product) {
+            $product=Product::whereKey($product['id'])->first();
+            $id=$product->id;
+            $title=$product->title;
+            $price=$product->price;
+            $stock=$product->stock;
+            $sort=$product->sort;
+            $province = '';
+            $product->province && $province = ChinaArea::whereKey($product->province)->first();
+            $city = '';
+            $product->city && $city = ChinaArea::whereKey($product->city)->first();
+            $dis=($province ? $province->name : '全国') . ($city ? $city->name : '全部地区');
+            return compact('id', 'title', 'price',
+                'stock','sort','dis');
+        })->prepend(['商品ID', '商品名称', '商品价格', '商品库存', '商品排序','地区']);
     }
 
     /**
