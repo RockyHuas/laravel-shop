@@ -124,6 +124,9 @@ class ProductsController extends Controller implements ExcelDataInterface
             });
             // 默认过滤条件
             $user = Admin::user();
+
+            $grid->model()->orderBy('id', 'desc');
+
             // 如果选择了品牌只能更新某个品牌的产品
             if ($user->brand_id) {
                 $grid->model()->where('brand_id', $user->brand_id);
@@ -233,7 +236,7 @@ class ProductsController extends Controller implements ExcelDataInterface
                 $form->multipleImage('images', '滑动图')->removable();
                 $form->multipleImage('app_images', '移动端滑动图')->removable();
                 // 创建一个富文本编辑器
-                $form->editor('description', '商品描述')->rules('required');
+                $form->editor('description', '商品描述');
                 // 创建一个富文本编辑器，移动端
                 $form->editor('app_description', '移动端商品描述');
             })->tab('其他', function ($form) use ($user) {
