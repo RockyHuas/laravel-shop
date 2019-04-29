@@ -7,7 +7,7 @@
     "require": {
         "php": ">=7.0.0",
         "dingo/api": "^2.2",
-        "encore/laravel-admin": "1.5.*",
+        "encore/laravel-admin": "v1.6.10",
         "endroid/qr-code": "^3.2",
         "fideloper/proxy": "~3.3",
         "kalnoy/nestedset": "^4.3",
