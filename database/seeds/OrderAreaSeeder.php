@@ -18,7 +18,7 @@ class OrderAreaSeeder extends Seeder
                $province = '';
                $city = '';
                $product =data_get($order,'items.0.product');
-               print_r($order->toArray());
+               dd($order->toArray());
                $product->province && $province = \App\Models\ChinaArea::whereKey($product->province)->first();
 
                $product->city && $city = \App\Models\ChinaArea::whereKey($product->city)->first();
