@@ -212,6 +212,7 @@
 
 <script>
     $(document).ready(function () {
+        console.log($order)
         // 同意 按钮的点击事件
         $('#confirm').click(function () {
             swal({
