@@ -192,10 +192,10 @@
 
                 @if($order->ship_status == \App\Models\Order::SHIP_STATUS_DELIVERED )
 
-                    <button style="margin-left: 20px;" type="button"  value="{{$order->id}}" class="confirm btn btn-success">完成</button>
+                    <button style="margin-left: 20px;" type="button"  value="{{ route('admin.orders.confirm', [$order->id]) }}" class="confirm btn btn-success">完成</button>
                 @endif
                 @if(!$order->paid_at)
-                    <button style="margin-left: 20px;" type="button"  value="{{$order->id}}" class="cancel btn btn-success">作废</button>
+                    <button style="margin-left: 20px;" type="button"  value="{{ route('admin.orders.cancel', [$order->id]) }}" class="cancel btn btn-success">作废</button>
                 @endif
                 @if($order->ship_status != \App\Models\Order::SHIP_STATUS_RECEIVED )
 
@@ -214,8 +214,8 @@
     $(document).ready(function () {
         // 同意 按钮的点击事件
         $('.confirm').click(function () {
-            console.log($(this).val())
-            console.log("{{ route('admin.orders.confirm', [$order->id]) }}")
+            let url=$(this).val()
+            console.log(url)
 
             swal({
                 title: '确认已完成？',
@@ -226,7 +226,7 @@
                 showLoaderOnConfirm: true,
                 preConfirm: function () {
                     return $.ajax({
-                        url: '{{ route('admin.orders.confirm', [$order->id]) }}',
+                        url: url,
                         type: 'POST',
                         data: JSON.stringify({
                             confirm: 1,
@@ -252,6 +252,8 @@
         });
 
         $('.cancel').click(function () {
+            let url=$(this).val()
+            console.log(url)
             swal({
                 title: '确认取消？',
                 type: 'warning',
@@ -261,7 +263,7 @@
                 showLoaderOnConfirm: true,
                 preConfirm: function () {
                     return $.ajax({
-                        url: '{{ route('admin.orders.cancel', [$order->id]) }}',
+                        url: url,
                         type: 'POST',
                         data: JSON.stringify({
                             cancel: 1,
