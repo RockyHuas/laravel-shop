@@ -2,8 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Models\ChinaArea;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Product;
 use App\Models\UserAddress;
 use App\Traits\OrderTrait;
 
@@ -15,12 +17,21 @@ class OrderRepo
     {
         return \DB::transaction(function () use ($user_address_id, $products, $total_amount) {
             // 获取地址
-            $address = UserAddress::with(['province','city','district'])->whereKey($user_address_id)->firstOrFail();
+            $province = '';
+            $city = '';
+            $address = UserAddress::with(['province', 'city', 'district'])->whereKey($user_address_id)->firstOrFail();
+            $product_id = array_get($products, '0.product_id');
+            $product = Product::whereKey($product_id)->first();
+            $product->province && $province = ChinaArea::whereKey($product->province)->first();
+
+            $product->city && $city = ChinaArea::whereKey($product->city)->first();
             // 创建订单
             $order = Order::create([
                 'user_id' => \Auth::id(),
+                'product_province'=>$province ? $province->name :'全国',
+                'product_city'=>$city ? $city->name :'全部地区',
                 'address' => [
-                    'address' =>$address->province->name . ' ' . $address->city->name . ' ' . $address->district->name . ' ' . $address['address'],
+                    'address' => $address->province->name . ' ' . $address->city->name . ' ' . $address->district->name . ' ' . $address['address'],
                     'contact_name' => $address['contact_name'],
                     'contact_phone' => $address['contact_phone'],
                 ],
