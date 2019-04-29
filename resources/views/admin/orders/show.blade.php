@@ -62,7 +62,7 @@
 
                 @foreach($order->items as $item)
                     <tr>
-                        <td>{{ $item->product->title }}</td>
+                        <td>{{ $item->product ? $item->product->title :'' }}</td>
                         @if($order->ship_status == \App\Models\Order::SHIP_STATUS_PENDING )
                             <td colspan="2">
                                 <div method="post" class="form-inline">
@@ -100,7 +100,7 @@
                                             @foreach($pay_methods as $item)
                                                 <input type="radio" name="pay_id" value="{{$item->id}}"
                                                        class="minimal pay_id" {{ $item->id == $order->pay_id?'checked':'' }}>
-                                                &nbsp;{{$item->title}}&nbsp;&nbsp;
+                                                &nbsp;{{$item ?$item->title :''}}&nbsp;&nbsp;
                                             @endforeach
                                         </label>
                                     </div>
@@ -124,7 +124,7 @@
                         <td>支付金额</td>
                     </tr>
                     <tr>
-                        <td>{{ $order->pay->title }}</td>
+                        <td>{{ $order->pay ? $order->pay->title :'' }}</td>
                         <td>{{ $order->paid_at->format('Y-m-d H:i:s') }}</td>
                         <td>￥{{ $order->pay_amount?$order->pay_amount:$order->total_amount }}</td>
                     </tr>
