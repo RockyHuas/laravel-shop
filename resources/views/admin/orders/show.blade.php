@@ -125,7 +125,7 @@
                     </tr>
                     <tr>
                         <td>{{ $order->pay ? $order->pay->title :'' }}</td>
-                        <td>{{ $order->paid_at->format('Y-m-d H:i:s') }}</td>
+                        <td>{{ $order->paid_at ? $order->paid_at->format('Y-m-d H:i:s') :'' }}</td>
                         <td>￥{{ $order->pay_amount?$order->pay_amount:$order->total_amount }}</td>
                     </tr>
                 @endif
@@ -157,7 +157,8 @@
                                 @if($order->ship_status !== \App\Models\Order::SHIP_STATUS_DELIVERED )
                                     <button style="margin-left: 20px;" type="submit" class="btn btn-success">发货</button>
                                 @else
-                                    <button style="margin-left: 20px;" type="submit" class="btn btn-success">调整发货</button>
+                                    <button style="margin-left: 20px;" type="submit" class="btn btn-success">调整发货
+                                    </button>
                                 @endif
                             </div>
                         </td>
