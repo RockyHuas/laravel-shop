@@ -40,7 +40,8 @@ class OrdersController extends Controller implements ExcelDataInterface
             // 获取支付方式
             $pay_methods = Pay::get();
 
-            $content->body(view('admin.orders.show', ['order' => $order, 'pay_methods' => $pay_methods]));
+            $content->body(
+                view('admin.orders.show', ['order' => $order, 'pay_methods' => $pay_methods]));
         });
     }
 
@@ -179,7 +180,7 @@ class OrdersController extends Controller implements ExcelDataInterface
 
                 $pay_methods = Pay::get();
 
-                return view('orders.print', ['order' => $model, 'pay_methods' => $pay_methods]);
+                return view('admin.orders.show', ['order' => $model, 'pay_methods' => $pay_methods]);
 
 //                return new Table(['ID', '内容', '发布时间'], $comments->toArray());
             });
