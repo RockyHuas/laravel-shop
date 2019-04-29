@@ -164,7 +164,17 @@
                         <td>{{ $order->ship_data['express_no'] }}</td>
                     </tr>
                 @endif
-
+                <tr>
+                    <td colspan="4">
+                        <div class="form-inline">
+                            <div class="form-group ">
+                                <label for="express_company" class="control-label">订单备注</label>
+                                <textarea type="text" id="express_company" name="note" value=""
+                                          class="form-control" placeholder="输入订单备注"></textarea>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
                 </tbody>
 
             </table>

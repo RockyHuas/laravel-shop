@@ -140,15 +140,18 @@ class OrdersController extends Controller implements ExcelDataInterface
         $express_company = $request->express_company;
         $express_no = $request->express_no;
         $pay_amount = $request->pay_amount;
+        $note = $request->note;
 
-        \DB::transaction(function () use ($order, $product, $pay_id, $address, $contact_name, $contact_phone, $express_company, $express_no, $pay_amount) {
+        \DB::transaction(function () use ($order, $product, $pay_id, $address,
+            $contact_name, $contact_phone, $express_company, $express_no,
+            $pay_amount,$note) {
             // 如果存在需要更新的产品信息，则更新
             $product && collect($product)->each(function ($item, $key) {
                 OrderItem::whereKey($key)->firstOrFail()->update($item);
             });
 
             $update_data = [];
-
+            $update_data['note'] = $note;
             // 如果提交了支付信息
             if ($pay_id) {
                 $update_data['pay_id'] = $pay_id;
