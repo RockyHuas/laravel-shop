@@ -38,6 +38,7 @@
         </tr>
         </tbody>
     </table>
+    <p><span>备注：{{ $order->note }}</span></p>
 </div>
 </body>
 </html>

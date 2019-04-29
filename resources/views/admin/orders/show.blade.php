@@ -137,27 +137,31 @@
                 <!-- 订单发货开始 -->
                 <!-- 如果订单未发货，展示发货表单 -->
                 @if($order->ship_status !== \App\Models\Order::SHIP_STATUS_RECEIVED )
-                        <tr>
-                            <td colspan="4">
-                                <div class="form-inline">
-                                    <div class="form-group ">
-                                        <label for="express_company" class="control-label">物流公司</label>
-                                        <input type="text" id="express_company"
-                                               name="express_company"
-                                                value="{{ $order->ship_data['express_company'] ? $order->ship_data['express_company'] :'顺丰快递'}}"
-                                               class="form-control" placeholder="输入物流公司">
-                                    </div>
-                                    <div class="form-group ">
-                                        <label for="express_no" class="control-label">物流单号</label>
-                                        <input type="text" id="express_no" name="express_no"
-                                               value="{{ $order->ship_data['express_no'] ? $order->ship_data['express_no'] :''}}"
-                                               class="form-control"
-                                               placeholder="输入物流单号">
-                                    </div>
-                                    <button style="margin-left: 20px;" type="submit" class="btn btn-success">发货</button>
+                    <tr>
+                        <td colspan="4">
+                            <div class="form-inline">
+                                <div class="form-group ">
+                                    <label for="express_company" class="control-label">物流公司</label>
+                                    <input type="text" id="express_company"
+                                           name="express_company"
+                                           value="{{ $order->ship_data['express_company'] ? $order->ship_data['express_company'] :'顺丰快递'}}"
+                                           class="form-control" placeholder="输入物流公司">
                                 </div>
-                            </td>
-                        </tr>
+                                <div class="form-group ">
+                                    <label for="express_no" class="control-label">物流单号</label>
+                                    <input type="text" id="express_no" name="express_no"
+                                           value="{{ $order->ship_data['express_no'] ? $order->ship_data['express_no'] :''}}"
+                                           class="form-control"
+                                           placeholder="输入物流单号">
+                                </div>
+                                @if($order->ship_status !== \App\Models\Order::SHIP_STATUS_DELIVERED )
+                                    <button style="margin-left: 20px;" type="submit" class="btn btn-success">发货</button>
+                                @else
+                                    <button style="margin-left: 20px;" type="submit" class="btn btn-success">调整发货</button>
+                                @endif
+                            </div>
+                        </td>
+                    </tr>
                 @else
                     <!-- 否则展示物流公司和物流单号 -->
                     <tr>
@@ -171,9 +175,9 @@
                     <td colspan="4">
                         <div class="form-inline">
                             <div class="form-group ">
-                                <label for="express_company" class="control-label">订单备注</label>
-                                <textarea type="text" id="express_company" name="note" value=""
-                                          class="form-control" placeholder="输入订单备注"></textarea>
+                                <label for="express_company" class="control-label">订单备注d</label>
+                                <textarea type="text" id="express_company" name="note"
+                                          class="form-control" placeholder="输入订单备注">{{ $order->note }}</textarea>
                             </div>
                         </div>
                     </td>
@@ -198,7 +202,6 @@
                 @endif
 
 
-
             </div>
 
         </form>
@@ -207,9 +210,9 @@
 </div>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         // 同意 按钮的点击事件
-        $('#confirm').click(function() {
+        $('#confirm').click(function () {
             swal({
                 title: '确认已完成？',
                 type: 'warning',
@@ -217,7 +220,7 @@
                 confirmButtonText: "确认",
                 cancelButtonText: "取消",
                 showLoaderOnConfirm: true,
-                preConfirm: function() {
+                preConfirm: function () {
                     return $.ajax({
                         url: '{{ route('admin.orders.confirm', [$order->id]) }}',
                         type: 'POST',
@@ -237,14 +240,14 @@
                 swal({
                     title: '操作成功',
                     type: 'success'
-                }).then(function() {
+                }).then(function () {
                     // 用户点击 swal 上的按钮时刷新页面
                     location.reload();
                 });
             });
         });
 
-        $('#cancel').click(function() {
+        $('#cancel').click(function () {
             swal({
                 title: '确认取消？',
                 type: 'warning',
@@ -252,7 +255,7 @@
                 confirmButtonText: "确认",
                 cancelButtonText: "取消",
                 showLoaderOnConfirm: true,
-                preConfirm: function() {
+                preConfirm: function () {
                     return $.ajax({
                         url: '{{ route('admin.orders.cancel', [$order->id]) }}',
                         type: 'POST',
@@ -272,7 +275,7 @@
                 swal({
                     title: '操作成功',
                     type: 'success'
-                }).then(function() {
+                }).then(function () {
                     // 用户点击 swal 上的按钮时刷新页面
                     location.reload();
                 });
