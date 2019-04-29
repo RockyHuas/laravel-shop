@@ -227,7 +227,7 @@ class OrdersController extends Controller implements ExcelDataInterface
                 return $pay_amount ?: 0;
             });;
             $grid->paid_at('支付状态')->display(function ($paid_at) {
-                return $paid_at ? '已支付' : '未支付';
+                return $this->paid_status;
             });
             $grid->ship_status('物流状态')->display(function ($value) {
                 return Order::$shipStatusMap[$value];
