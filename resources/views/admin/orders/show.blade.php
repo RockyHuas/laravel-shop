@@ -111,6 +111,7 @@
                                            value="{{ $order->pay_amount ?:$order->total_amount  }}"
                                            class="form-control" placeholder="支付金额">
                                 </div>
+                                <button style="margin-left: 20px;" type="submit" class="btn btn-success">支付</button>
                             </div>
                         </td>
                     </tr>
@@ -135,14 +136,13 @@
                 </tr>
                 <!-- 订单发货开始 -->
                 <!-- 如果订单未发货，展示发货表单 -->
-                @if($order->ship_status === \App\Models\Order::SHIP_STATUS_PENDING )
-                    @if($order->refund_status !== \App\Models\Order::REFUND_STATUS_SUCCESS)
+                @if($order->ship_status !== \App\Models\Order::SHIP_STATUS_RECEIVED )
                         <tr>
                             <td colspan="4">
                                 <div class="form-inline">
                                     <div class="form-group ">
                                         <label for="express_company" class="control-label">物流公司</label>
-                                        <input type="text" id="express_company" name="express_company" value=""
+                                        <input type="text" id="express_company" name="express_company" value="顺丰快递"
                                                class="form-control" placeholder="输入物流公司">
                                     </div>
                                     <div class="form-group ">
@@ -151,10 +151,10 @@
                                                class="form-control"
                                                placeholder="输入物流单号">
                                     </div>
+                                    <button style="margin-left: 20px;" type="submit" class="btn btn-success">发货</button>
                                 </div>
                             </td>
                         </tr>
-                    @endif
                 @else
                     <!-- 否则展示物流公司和物流单号 -->
                     <tr>
@@ -168,16 +168,102 @@
                 </tbody>
 
             </table>
-            @if($order->ship_status == \App\Models\Order::SHIP_STATUS_PENDING )
-                <div style="width:100%;text-align: center">
-                    <button type="submit" class="btn btn-success">保存</button>
-                </div>
-            @else
-                <div style="width:100%;text-align: center">
-                    <a  href="{{ route('admin.orders.print', [$order->id]) }}" target="_blank" class="btn btn-success">打印订单</a>
-                </div>
-            @endif
+            <div style="width:100%;text-align: center">
+                <a href="{{ route('admin.orders.print', [$order->id]) }}" target="_blank"
+                   class="btn btn-success">打印订单</a>
+
+                @if($order->ship_status == \App\Models\Order::SHIP_STATUS_DELIVERED )
+
+                    <button style="margin-left: 20px;" type="button" id="confirm" class="btn btn-success">完成</button>
+                @endif
+                @if(!$order->paid_at)
+                    <button style="margin-left: 20px;" type="button" id="cancel" class="btn btn-success">作废</button>
+                @endif
+                @if($order->ship_status != \App\Models\Order::SHIP_STATUS_RECEIVED )
+
+                    <button style="margin-left: 20px;" type="submit" class="btn btn-success">保存</button>
+                @endif
+
+
+
+            </div>
+
         </form>
         </form>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        // 同意 按钮的点击事件
+        $('#confirm').click(function() {
+            swal({
+                title: '确认已完成？',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: "确认",
+                cancelButtonText: "取消",
+                showLoaderOnConfirm: true,
+                preConfirm: function() {
+                    return $.ajax({
+                        url: '{{ route('admin.orders.confirm', [$order->id]) }}',
+                        type: 'POST',
+                        data: JSON.stringify({
+                            confirm: 1,
+                            _token: LA.token,
+                        }),
+                        contentType: 'application/json',
+                    });
+                },
+                allowOutsideClick: false
+            }).then(function (ret) {
+                // 如果用户点击了『取消』按钮，则不做任何操作
+                if (ret.dismiss === 'cancel') {
+                    return;
+                }
+                swal({
+                    title: '操作成功',
+                    type: 'success'
+                }).then(function() {
+                    // 用户点击 swal 上的按钮时刷新页面
+                    location.reload();
+                });
+            });
+        });
+
+        $('#cancel').click(function() {
+            swal({
+                title: '确认取消？',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: "确认",
+                cancelButtonText: "取消",
+                showLoaderOnConfirm: true,
+                preConfirm: function() {
+                    return $.ajax({
+                        url: '{{ route('admin.orders.cancel', [$order->id]) }}',
+                        type: 'POST',
+                        data: JSON.stringify({
+                            cancel: 1,
+                            _token: LA.token,
+                        }),
+                        contentType: 'application/json',
+                    });
+                },
+                allowOutsideClick: false
+            }).then(function (ret) {
+                // 如果用户点击了『取消』按钮，则不做任何操作
+                if (ret.dismiss === 'cancel') {
+                    return;
+                }
+                swal({
+                    title: '操作成功',
+                    type: 'success'
+                }).then(function() {
+                    // 用户点击 swal 上的按钮时刷新页面
+                    location.reload();
+                });
+            });
+        });
+    });
+</script>

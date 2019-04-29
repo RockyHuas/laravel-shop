@@ -161,7 +161,7 @@ class OrdersController extends Controller implements ExcelDataInterface
             }
 
             // 如果提交了物流信息
-            if ($express_no || $express_company) {
+            if ($express_no && $express_company) {
                 $update_data['ship_data'] = compact('express_no', 'express_company');
                 $update_data['ship_status'] = Order::SHIP_STATUS_DELIVERED;
             }
@@ -176,6 +176,23 @@ class OrdersController extends Controller implements ExcelDataInterface
 
         // 返回上一页
         return redirect()->back();
+    }
+
+
+    public function confirm(Order $order)
+    {
+        $order->update([
+            'ship_status'=>Order::SHIP_STATUS_RECEIVED
+        ]);
+        return $order;
+    }
+
+    public function cancel(Order $order)
+    {
+        $order->update([
+            'closed'=>1
+        ]);
+        return $order;
     }
 
     protected function grid()

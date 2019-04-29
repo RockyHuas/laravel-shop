@@ -120,6 +120,8 @@ Route::group([
     $router->get('orders/{order}', 'OrdersController@show')->name('admin.orders.show');
     $router->get('orders/{order}/print', 'OrdersController@print')->name('admin.orders.print');
     $router->post('orders/{order}/change', 'OrdersController@change')->name('admin.orders.change');
+    $router->post('orders/{order}/confirm', 'OrdersController@confirm')->name('admin.orders.confirm');
+    $router->post('orders/{order}/cancel', 'OrdersController@cancel')->name('admin.orders.cancel');
 
     // 管理员列表
     $router->get('admin/user', 'AdminUserController@index')->name('admin.admin.user.index');
