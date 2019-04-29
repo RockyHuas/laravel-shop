@@ -175,7 +175,7 @@
                     <td colspan="4">
                         <div class="form-inline">
                             <div class="form-group ">
-                                <label for="express_company" class="control-label">订单备注d</label>
+                                <label for="express_company" class="control-label">订单备注:</label>
                                 <textarea type="text" id="express_company" name="note"
                                           class="form-control" placeholder="输入订单备注">{{ $order->note }}</textarea>
                             </div>
