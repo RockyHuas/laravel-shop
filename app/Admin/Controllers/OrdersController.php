@@ -226,21 +226,26 @@ class OrdersController extends Controller implements ExcelDataInterface
 
                 }, '买家');
 
-                $filter->where(function ($query) {
+//                $filter->where(function ($query) {
+//
+//                    $query->whereHas('items', function ($query) {
+//
+//                        $query->whereHas('product', function ($query) {
+//
+//                            $query->whereHas('product', function ($query) {
+//
+//
+//                            });
+//
+//                        });
+//
+//                    });
+//
+//                }, '产品所属地区');
 
-                    $query->whereHas('items', function ($query) {
+                $filter->in('items.product.province', '产品所属省份')->multipleSelect('/admin/area/province')->load('city', '/admin/area/city');
 
-                        $query->whereHas('product', function ($query) {
-
-                            $query->in('province', '产品所属省份')->multipleSelect('/admin/area/province')->load('city', '/admin/area/city');
-                            $query->in('city', '产品所属地区')->multipleSelect('/admin/area/city');
-
-                        });
-
-                    });
-
-                }, '产品所属地区');
-
+                $filter->in('items.product.city', '产品所属地区')->multipleSelect('/admin/area/city');
 
                 $filter->like('address', '地址，收货人或手机号');
 
