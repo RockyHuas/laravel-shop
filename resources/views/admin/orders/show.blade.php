@@ -215,8 +215,8 @@
         // 同意 按钮的点击事件
         $('.confirm').click(function () {
             console.log($(this).val())
-            console.log({{ route('admin.orders.confirm', [$order->id]) }})
-           
+            console.log("{{ route('admin.orders.confirm', [$order->id]) }}")
+
             swal({
                 title: '确认已完成？',
                 type: 'warning',
