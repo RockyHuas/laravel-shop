@@ -216,8 +216,7 @@
         $('.confirm').click(function () {
             console.log($(this).val())
             console.log({{ route('admin.orders.confirm', [$order->id]) }})
-            console.log("{{ route('admin.orders.confirm', ["+$(this).val()+
-            "]) }}")
+           
             swal({
                 title: '确认已完成？',
                 type: 'warning',
