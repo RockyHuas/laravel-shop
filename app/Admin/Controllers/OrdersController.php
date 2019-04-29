@@ -226,10 +226,18 @@ class OrdersController extends Controller implements ExcelDataInterface
 
                 }, '买家');
                 // 产品所属省份
-                $filter->like('product_province', '产品所属省份');
+                $filter->where(function ($query) {
+                        $query->where('product_province', 'like',
+                            "%{$this->input}%")
+                        ->orWhere('product_province','全国');
+                }, '产品所属省份');
 
                 // 产品所属城市
-                $filter->like('product_city', '产品所属城市');
+                $filter->where(function ($query) {
+                    $query->where('producproduct_cityt_province', 'like',
+                        "%{$this->input}%")
+                        ->orWhere('product_city','全部地区');
+                }, '产品所属地区');
 
 
                 $filter->like('address', '地址，收货人或手机号');
