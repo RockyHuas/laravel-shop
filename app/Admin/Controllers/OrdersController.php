@@ -171,7 +171,7 @@ class OrdersController extends Controller implements ExcelDataInterface
             $grid->model()->orderBy('created_at', 'desc');
 
 //            $grid->no('订单流水号');
-            $grid->no('订单流水号')->modal('编辑订单信息', function ($model) {
+            $grid->no('订单流水号')->expand('编辑订单信息', function ($model) {
 
 //                $comments = $model->comments()->take(10)->get()->map(function ($comment) {
 //                    return $comment->only(['id', 'content', 'created_at']);
