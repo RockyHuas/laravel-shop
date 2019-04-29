@@ -170,7 +170,19 @@ class OrdersController extends Controller implements ExcelDataInterface
             // 只展示已支付的订单，并且默认按支付时间倒序排序
             $grid->model()->orderBy('created_at', 'desc');
 
-            $grid->no('订单流水号');
+//            $grid->no('订单流水号');
+            $grid->no('订单流水号')->modal('编辑订单信息', function ($model) {
+
+//                $comments = $model->comments()->take(10)->get()->map(function ($comment) {
+//                    return $comment->only(['id', 'content', 'created_at']);
+//                });
+
+                $pay_methods = Pay::get();
+
+                return view('orders.print', ['order' => $model, 'pay_methods' => $pay_methods]);
+
+//                return new Table(['ID', '内容', '发布时间'], $comments->toArray());
+            });
             // 展示关联关系的字段时，使用 column 方法
             $grid->column('user.name', '买家');
             $grid->address('收货地址')->display(function ($address) {
