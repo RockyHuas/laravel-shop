@@ -34,6 +34,8 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
     // 忘记密码
     $api->patch('users', 'UserController@updatePassword')
         ->name('api.users.update.password');
+    $api->put('users', 'UserController@updatePassword')
+        ->name('api.users.update.password');
 
     // 用户注册
     $api->post('users', 'UserController@store')
@@ -117,6 +119,8 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
         $api->delete('orders/{order}', 'OrderController@cancel');
         // 确认收获
         $api->patch('orders/{order}/confirm', 'OrderController@confirm');
+        // 确认收获
+        $api->put('orders/{order}/confirm', 'OrderController@confirm');
         // 订单详情
         $api->get('orders/{order}', 'OrderController@show');
         // 修改密码
@@ -125,6 +129,7 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
         $api->get('users/me', 'UserController@getUserInfo');
         // 绑定微信
         $api->patch('users/bind', 'UserController@bindWeChat');
+        $api->put('users/bind', 'UserController@bindWeChat');
 
 
         // 文章详情
