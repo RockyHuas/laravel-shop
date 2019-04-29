@@ -142,12 +142,15 @@
                                 <div class="form-inline">
                                     <div class="form-group ">
                                         <label for="express_company" class="control-label">物流公司</label>
-                                        <input type="text" id="express_company" name="express_company" value="顺丰快递"
+                                        <input type="text" id="express_company"
+                                               name="express_company"
+                                                value="{{ $order->ship_data['express_company'] ? $order->ship_data['express_company'] :'顺丰快递'}}"
                                                class="form-control" placeholder="输入物流公司">
                                     </div>
                                     <div class="form-group ">
                                         <label for="express_no" class="control-label">物流单号</label>
-                                        <input type="text" id="express_no" name="express_no" value=""
+                                        <input type="text" id="express_no" name="express_no"
+                                               value="{{ $order->ship_data['express_no'] ? $order->ship_data['express_no'] :''}}"
                                                class="form-control"
                                                placeholder="输入物流单号">
                                     </div>
