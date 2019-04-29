@@ -192,10 +192,10 @@
 
                 @if($order->ship_status == \App\Models\Order::SHIP_STATUS_DELIVERED )
 
-                    <button style="margin-left: 20px;" type="button" id="confirm" class="btn btn-success">完成</button>
+                    <button style="margin-left: 20px;" type="button"  value="{{$order->id}}" class="confirm btn btn-success">完成</button>
                 @endif
                 @if(!$order->paid_at)
-                    <button style="margin-left: 20px;" type="button" id="cancel" class="btn btn-success">作废</button>
+                    <button style="margin-left: 20px;" type="button"  value="{{$order->id}}" class="cancel btn btn-success">作废</button>
                 @endif
                 @if($order->ship_status != \App\Models\Order::SHIP_STATUS_RECEIVED )
 
@@ -212,9 +212,12 @@
 
 <script>
     $(document).ready(function () {
-        console.log($order)
         // 同意 按钮的点击事件
-        $('#confirm').click(function () {
+        $('.confirm').click(function () {
+            console.log($(this).val())
+            console.log({{ route('admin.orders.confirm', [$order->id]) }})
+            console.log("{{ route('admin.orders.confirm', ["+$(this).val()+
+            "]) }}")
             swal({
                 title: '确认已完成？',
                 type: 'warning',
@@ -249,7 +252,7 @@
             });
         });
 
-        $('#cancel').click(function () {
+        $('.cancel').click(function () {
             swal({
                 title: '确认取消？',
                 type: 'warning',
