@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Extensions\ExcelDataInterface;
 use App\Admin\Extensions\ExcelExpoter;
 use App\Exceptions\InternalException;
+use App\Models\ChinaArea;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Pay;
@@ -67,28 +68,40 @@ class OrdersController extends Controller implements ExcelDataInterface
     public function exportData($data)
     {
         return $data->map(function ($order) {
-            $order=Order::with('items.product')->whereKey($order['id'])->firstOrFail();
-            $no = $order->no;
-            $user_name = data_get($order, 'user.name');
-            $contact_name = data_get($order, 'address.contact_name');
-            $address = data_get($order, 'address.address');
-            $contact_phone = data_get($order, 'address.contact_phone');
-            $order_items = $order->items->map(function ($order_item) use ($order) {
+            $order=Order::with('items.product.brand')->whereKey($order['id'])->firstOrFail();
+            return $order->items->map(function ($order_item) use ($order) {
+                $no = $order->no;
+                $province='';
+                $city = '';
+                $brand_name=data_get($order_item, 'product.brand.title');
+                $order_item->product->province && $province = ChinaArea::whereKey( $order_item->product->province)->first();
+
+                $order_item->product->city && $city = ChinaArea::whereKey($order_item->product)->first();
+                $province_name=$province ? $province->name :'全国';
+                $city_name=$city ? $city->name :'全部地区';
+                // 创建订单
+                $user_name = data_get($order, 'user.name');
+                $contact_name = data_get($order, 'address.contact_name');
+                $address = data_get($order, 'address.address');
+                $contact_phone = data_get($order, 'address.contact_phone');
                 $product_name = data_get($order_item, 'product.title');
                 $product_price = data_get($order_item, 'price');
                 $product_amount = data_get($order_item, 'amount');
-                return '产品名称：' . $product_name . ',价格：' . $product_price . '.数量：' . $product_amount;
-            })->implode('.......');
+                $order_total = $order->total_amount;
+                $pay_status = $order->paid_at ? '已支付' : '未支付';
+                $order_pay_total = $order->pay_amount;
+                $note = $order->note;
+                $order_time = $order->created_at->toDateTimeString();
+                return compact('no', 'user_name', 'contact_name',
+                    'address', 'contact_phone', 'product_name', 'product_price',
+                    'product_amount','brand_name','province_name','city_name',
+                    'order_total', 'pay_status', 'order_pay_total',
+                    'note','order_time');
 
-            $order_total = $order->total_amount;
-            $pay_status = $order->paid_at ? '已支付' : '未支付';
-            $order_pay_total = $order->pay_amount;
-            $order_time = $order->created_at->toDateTimeString();
-
-            return compact('no', 'user_name', 'contact_name', 'address',
-                'contact_phone', 'order_items', 'order_total', 'pay_status', 'order_pay_total', 'order_time');
-
-        })->prepend(['订单编号', '买家', '收货人', '联系地址', '手机号码', '商品', '订单总额', '支付状态', '支付金额', '订单创建时间']);
+            });
+        })->flatten(1)->prepend(['订单编号', '买家', '收货人', '联系地址', '手机号码',
+            '商品名称','商品价格','商品数量','品牌','省份','城市',
+            '订单总额', '支付状态', '支付金额', '订单备注','订单创建时间']);
     }
 
     public function ship(Order $order, Request $request)
