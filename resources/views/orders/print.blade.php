@@ -27,13 +27,13 @@
     <table>
         <thead>
         <tr>
-            <th>序号</th><th>商品名称</th><th>数量</th><th>单价</th><th>小计</th>
+            <th>序号</th><th >商品名称</th><th>数量</th><th>单价</th><th>小计</th>
         </tr>
         </thead>
         <tbody>
         @foreach($order->items as $key=>$item)
             <tr>
-                <td>{{$key+1}}</td><td>{{ $item->product->title }}</td><td>{{ $item->amount}}</td><td>{{ $item->price}}</td><td>￥{{ $item->amount *$item->price}}</td>
+                <td>{{$key+1}}</td><td style="text-align: left;">{{ $item->product->title }}</td><td>{{ $item->amount}}</td><td>{{ $item->price}}</td><td>￥{{ $item->amount *$item->price}}</td>
             </tr>
         @endforeach
         <tr class="spe">
