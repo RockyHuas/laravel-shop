@@ -42,6 +42,7 @@
         </tbody>
         <p><span>备注：{{ $order->note }}</span></p>
     </table>
+
 </div>
 </body>
 </html>
