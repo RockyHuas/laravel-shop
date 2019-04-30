@@ -22,7 +22,7 @@
 <body>
 <div class="order">
     <h2>订货单</h2>
-    <p><span>单号：{{$order->no}}</span><span>客户名称：{{ $order->user->name }}</span><span>制单时间：{{now()->toDateTimeString()}}</span></p>
+    <p><span>单号：{{$order->no}}</span><span>客户名称：{{ $order->user->name }}</span><span>制单时间：{{now()->toDateString()}}</span></p>
     <p><span>收货信息：{{ $order->address['address'] }}  {{ $order->address['contact_name'] }} {{ $order->address['contact_phone'] }}</span></p>
     <table>
         <thead>
