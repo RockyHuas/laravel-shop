@@ -10,7 +10,10 @@
             width: 800px;
         }
         .order h2{ text-align: center;}
-        .order p span{ margin-right: 100px;}
+        .order p{border: 1px solid #ccc; margin: 0; line-height: 38px; border-bottom: 0; display: flex; padding: 0 10px; box-sizing: border-box;}
+        .order p span:nth-of-type(1){ min-width: 40%;}
+        .order p span:nth-of-type(2){ min-width: 30%; text-align: center; border-left: 1px solid #ccc;}
+        .order p span:nth-of-type(3){ min-width: 30%; text-align: center; border-left: 1px solid #ccc;}
         .order table{ width: 100%; border-collapse: collapse; text-align: center; line-height: 40px;}
         .order table tr th,.order table tr td{ border: 1px solid #ccc;}
         .order table tr.spe td{ text-align: right; padding-right: 50px;}
@@ -28,17 +31,17 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($order->items as $item)
-        <tr>
-            <td>1</td><td>{{ $item->product->title }}</td><td>{{ $item->amount}}</td><td>{{ $item->price}}</td><td>￥{{ $item->amount *$item->price}}</td>
-        </tr>
+        @foreach($order->items as $key=>$item)
+            <tr>
+                <td>{{$key+1}}</td><td>{{ $item->product->title }}</td><td>{{ $item->amount}}</td><td>{{ $item->price}}</td><td>￥{{ $item->amount *$item->price}}</td>
+            </tr>
         @endforeach
         <tr class="spe">
             <td colspan="8">合计金额：￥{{ $order->pay_amount ?:$order->total_amount  }}</td>
         </tr>
         </tbody>
+        <p><span>备注：{{ $order->note }}</span></p>
     </table>
-    <p><span>备注：{{ $order->note }}</span></p>
 </div>
 </body>
 </html>
