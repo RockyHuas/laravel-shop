@@ -130,6 +130,8 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
         // 绑定微信
         $api->patch('users/bind', 'UserController@bindWeChat');
         $api->put('users/bind', 'UserController@bindWeChat');
+        // 修改用户资料
+        $api->put('users/profile', 'UserController@updateProfile');
 
 
         // 文章详情

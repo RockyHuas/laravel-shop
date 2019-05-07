@@ -15,11 +15,11 @@ trait UserTrait
     {
         // 过滤非法字段
         $insert_data = array_only($data, ['name', 'phone', 'password', 'shop_name',
-            'province_id', 'city_id', 'district_id','open_id']);
+            'province_id', 'city_id', 'district_id', 'open_id']);
 
         // 密码字段加密
         $insert_data['password'] = bcrypt($insert_data['password']);
-        $open_id=array_get($data,'open_id');
+        $open_id = array_get($data, 'open_id');
         throw_on($open_id && User::whereOpenId($open_id)->first(), '该微信已被绑定');
         throw_on(!$insert_data['province_id'] || !$insert_data['city_id'], '地区不能为空');
         // 判断用户名是否重复
@@ -28,6 +28,26 @@ trait UserTrait
 
         // 创建
         return User::create($insert_data);
+    }
+
+    /**
+     * 更新用户资料
+     * @param int $user_id
+     * @param array $data
+     * @return mixed
+     */
+    public function userProfileUpdate(int $user_id, array $data)
+    {
+        $update_data = array_only($data, ['name', 'shop_name', 'province_id', 'city_id', 'district_id']);
+
+        // 判断用户名是否重复
+        throw_on(User::whereName($update_data['name'])->where('id','<>',$user_id)->first(), '用户名重复');
+
+        $user = User::whereKey($user_id)->firstOrFail();
+
+        $user->update($update_data);
+
+        return $user;
     }
 
     /**

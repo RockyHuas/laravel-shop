@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Extensions\ExcelDataInterface;
 use App\Admin\Extensions\ExcelExpoter;
 use App\Admin\Extensions\Tools\GlobalUploadButton;
+use App\Jobs\ImportDataJob;
 use App\Models\ChinaArea;
 use App\Models\User;
 
@@ -140,15 +141,7 @@ class UserController extends Controller implements ExcelDataInterface
             // 获取文件路径
             $file_path = storage_path('app/' . $request->file('upfile')->storeAs('upload', 'product.xlsx'));
 
-            //获取当前文本编码格式
-            $content = file_get_contents($file_path);
-            $fileType = mb_detect_encoding($content, array('UTF-8', 'GBK', 'LATIN1', 'BIG5'));
-
-            app(Excel::class)->load($file_path, function ($reader) {
-                $rows = $reader->all();
-                // 处理导入的数据
-                $this->handleUploadData($rows);
-            }, $fileType);//以指定的编码格式打开文件
+            dispatch(new ImportDataJob($file_path, $this));
 
             $success = new MessageBag([
                 'title' => '恭喜',

@@ -107,4 +107,24 @@ class UserController extends Controller
 
         return ok($user);
     }
+
+    /**
+     * 更新用户资料
+     * @param ApiRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateProfile(ApiRequest $request)
+    {
+        $params = $request->fields([$this,
+            'name',
+            'shop_name',
+            'province_id',
+            'city_id',
+            'district_id',
+        ]);
+
+        $result = $this->repo->userProfileUpdate(\Auth::id(),$params);
+
+        return ok($result);
+    }
 }
