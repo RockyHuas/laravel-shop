@@ -41,7 +41,7 @@ class UserController extends Controller implements ExcelDataInterface
     public function create()
     {
         return Admin::content(function (Content $content) {
-            $content->header('创建文章');
+            $content->header('创建用户');
             $content->body($this->form());
         });
     }
@@ -55,7 +55,7 @@ class UserController extends Controller implements ExcelDataInterface
     public function edit($id)
     {
         return Admin::content(function (Content $content) use ($id) {
-            $content->header('编辑文章');
+            $content->header('编辑用户');
             $content->body($this->form()->edit($id));
         });
     }
@@ -179,7 +179,10 @@ class UserController extends Controller implements ExcelDataInterface
                     'phone' => $item[1],
                     'password' => $item[2] ? bcrypt($item[2]) : bcrypt($item[1]),
                     'shop_name' => $item[3] ?: '',
-                    'status' => $item[4] ?: 0
+                    'status' => $item[4] ?: 0,
+                    'province_id'=>$item[5] ?: 0,
+                    'city_id'=>$item[6] ?: 0,
+                    'district_id'=>$item[7] ?: 0,
                 ]);
             }
         });
