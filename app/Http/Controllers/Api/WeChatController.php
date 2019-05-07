@@ -29,7 +29,7 @@ class WeChatController extends Controller
             'code',
         ], true);
 
-        $wechat = app('wechat.mini_program');
+        $app = app('wechat.mini_program');
 
         $result = $app->auth->session($code);
 
