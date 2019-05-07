@@ -23,6 +23,8 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
 
     $api->get('wechat/scan', 'WeChatController@scanUrl');
 
+    $api->get('wechat/mini/open_id', 'WeChatController@getOpenId');
+
     $api->post('images', 'ImageController@store')
         ->name('api.images.store');
 

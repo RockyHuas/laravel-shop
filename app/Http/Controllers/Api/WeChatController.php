@@ -20,4 +20,18 @@ class WeChatController extends Controller
 
         return ok($qrcodeUrl);
     }
+
+    // 小程序 open_id
+    public function getOpenId(ApiRequest $request)
+    {
+        [$code] = $request->fields([$this,
+            'code',
+        ], true);
+
+        $wechat = app('wechat.mini_program');
+
+        $result = $app->auth->session($code);
+
+        return ok($result);
+    }
 }
