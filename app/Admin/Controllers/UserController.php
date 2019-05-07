@@ -180,9 +180,6 @@ class UserController extends Controller implements ExcelDataInterface
                     'password' => $item[2] ? bcrypt($item[2]) : bcrypt($item[1]),
                     'shop_name' => $item[3] ?: '',
                     'status' => $item[4] ?: 0,
-                    'province_id'=>$item[5] ?: 0,
-                    'city_id'=>$item[6] ?: 0,
-                    'district_id'=>$item[7] ?: 0,
                 ]);
             }
         });
@@ -194,14 +191,14 @@ class UserController extends Controller implements ExcelDataInterface
             $user = User::whereKey($user['id'])->firstOrFail();
             $user_name = $user->name;
             $phone = $user->phone;
-            $union_id = $user->union_id ? '是' : '否';
+            $open_id = $user->open_id ? '是' : '否';
             $province = $user->province->name;
             $city = $user->city->name;
             $shop_name = $user->shop_name;
             $status = $user->status ? ($user->status == 1 ? '审核通过' : '审核拒绝') : '未审核';
 
-            return compact('user_name', 'phone', 'union_id', 'province', 'city', 'shop_name', 'status');
-        })->prepend(['用户名', '手机号码', '是否已经绑定微信', '省份', '城市', '店名', '审核状态']);
+            return compact('user_name', 'phone', 'open_id', 'shop_name', 'status', 'province', 'city');
+        })->prepend(['用户名', '手机号码', '是否已经绑定微信', '店名', '审核状态', '省份', '城市']);
     }
 
     /**
