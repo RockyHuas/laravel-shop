@@ -7,7 +7,7 @@
     <title>订货单</title>
     <style>
         .order {
-            width: 750px;
+            width: 700px;
         }
         .order h2{ text-align: center;}
         .order p{border: 1px solid #ccc; margin: 0; line-height: 38px; border-bottom: 0; display: flex; padding: 0 10px; box-sizing: border-box;}
