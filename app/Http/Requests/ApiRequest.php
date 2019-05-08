@@ -45,6 +45,7 @@ class ApiRequest extends BaseRequest
         'order_status' => 'nullable|integer|in:0,1,2,3,4,5',
         'old_password' => 'required|string',
         'open_id' => 'nullable|string',
+        'mini_id' => 'nullable|string',
         'code' => 'required|string',
     ];
 }

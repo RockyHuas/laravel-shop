@@ -15,12 +15,17 @@ trait UserTrait
     {
         // 过滤非法字段
         $insert_data = array_only($data, ['name', 'phone', 'password', 'shop_name',
-            'province_id', 'city_id', 'district_id', 'open_id']);
+            'province_id', 'city_id', 'district_id', 'open_id','mini_id']);
 
         // 密码字段加密
         $insert_data['password'] = bcrypt($insert_data['password']);
+        // 判断公众号是否被绑定
         $open_id = array_get($data, 'open_id');
         throw_on($open_id && User::whereOpenId($open_id)->first(), '该微信已被绑定');
+        // 判断小程序是否被绑定
+        $mini_id = array_get($data, 'mini_id');
+        throw_on($mini_id && User::where('mini_id',$mini_id)->first(), '该微信已被绑定');
+
         throw_on(!$insert_data['province_id'] || !$insert_data['city_id'], '地区不能为空');
         // 判断用户名是否重复
         throw_on(User::whereName($insert_data['name'])->first(), '用户名重复');

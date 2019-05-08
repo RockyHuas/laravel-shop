@@ -9,13 +9,16 @@ class AuthorizationsRepo
 {
     protected $expires_in = 24 * 60 * 14; // 过期时间，单位：minutes
 
+
     /**
      * 用户登录
      * @param string $name
      * @param string $password
+     * @param string $open_id
+     * @param string $mini_id
      * @return array
      */
-    public function login(string $name, string $password, string $open_id = '')
+    public function login(string $name, string $password, string $open_id = '', string $mini_id='')
     {
         // 组装参数
         $credentials = compact('name', 'password');
@@ -44,6 +47,14 @@ class AuthorizationsRepo
                 ->retrieveByCredentials($credentials);
 
             $user->update(['open_id' => $open_id]);
+        }
+
+        if ($mini_id) {
+            throw_on(User::where('mini_id',$mini_id)->first(), '该微信已被绑定');
+            $user = Auth::guard('api')->getProvider()
+                ->retrieveByCredentials($credentials);
+
+            $user->update(['mini_id' => $mini_id]);
         }
 
         return $this->returnWithToken($token);

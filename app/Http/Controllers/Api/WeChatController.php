@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ApiRequest;
@@ -32,7 +33,16 @@ class WeChatController extends Controller
         $app = app('wechat.mini_program');
 
         $result = $app->auth->session($code);
+        $result['token'] = '';
 
+        if ($open_id = array_get($result, 'openid')) {
+            $user = User::where('mini_id', $open_id)->first();
+            // 如果用户存在
+            if ($user) {
+                $token = \Auth::guard('api')->fromUser($user);
+                $result['token'] = $token;
+            }
+        }
         return ok($result);
     }
 }

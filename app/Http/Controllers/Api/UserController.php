@@ -32,7 +32,8 @@ class UserController extends Controller
             'city_id',
             'district_id',
             'password' => ['rule' => 'required|string|min:6|confirmed'],
-            'open_id'
+            'open_id',
+            'mini_id'
         ]);
 
         $result = $this->repo->userCreate($params);
