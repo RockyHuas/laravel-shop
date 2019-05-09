@@ -66,7 +66,11 @@ class ProductsController extends Controller implements ExcelDataInterface
 
     public function delete($id)
     {
-        Product::whereKey($id)->firstOrFail()->delete();
+        DB::transaction(function () use ($id) {
+            Product::whereIn('id', explode(',', $id))->get()->each(function ($product) {
+                $product->delete();
+            });
+        });
 
         return response()->json([
             'status' => true,
@@ -90,20 +94,20 @@ class ProductsController extends Controller implements ExcelDataInterface
     public function exportData($data)
     {
         return $data->map(function ($product) {
-            $product=Product::whereKey($product['id'])->first();
-            $id=$product->id;
-            $title=$product->title;
-            $price=$product->price;
-            $stock=$product->stock;
-            $sort=$product->sort;
+            $product = Product::whereKey($product['id'])->first();
+            $id = $product->id;
+            $title = $product->title;
+            $price = $product->price;
+            $stock = $product->stock;
+            $sort = $product->sort;
             $province = '';
             $product->province && $province = ChinaArea::whereKey($product->province)->first();
             $city = '';
             $product->city && $city = ChinaArea::whereKey($product->city)->first();
-            $dis=($province ? $province->name : '全国') . ($city ? $city->name : '全部地区');
+            $dis = ($province ? $province->name : '全国') . ($city ? $city->name : '全部地区');
             return compact('id', 'title', 'price',
-                'stock','sort','dis');
-        })->prepend(['商品ID', '商品名称', '商品价格', '商品库存', '商品排序','地区']);
+                'stock', 'sort', 'dis');
+        })->prepend(['商品ID', '商品名称', '商品价格', '商品库存', '商品排序', '地区']);
     }
 
     /**
@@ -396,7 +400,7 @@ class ProductsController extends Controller implements ExcelDataInterface
             // 获取文件路径
             $file_path = storage_path('app/' . $request->file('upfile')->storeAs('upload', 'product.xlsx'));
 
-            dispatch(new ImportDataJob($file_path,$this));
+            dispatch(new ImportDataJob($file_path, $this));
 
             $success = new MessageBag([
                 'title' => '恭喜',
