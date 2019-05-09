@@ -35,7 +35,7 @@ class UserAddress extends Model
 
     public function getFullAddressAttribute()
     {
-        return "{$this->province->name}{$this->city->name}" . data_get($this, 'district.name') . "{{$this->address}";
+        return "{$this->province->name}{$this->city->name}" . data_get($this, 'district.name') . "{$this->address}";
     }
 
     // 用户收货地址
