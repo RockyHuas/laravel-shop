@@ -44,9 +44,9 @@ trait UserAddressTrait
 
         // 开始新增
         $user_address = UserAddress::create([
-            'province_id' => array_get($data, 'province_id'),
-            'city_id' => array_get($data, 'city_id'),
-            'district_id' => array_get($data, 'district_id'),
+            'province_id' => array_get($data, 'province_id',0),
+            'city_id' => array_get($data, 'city_id',0),
+            'district_id' => array_get($data, 'district_id',0),
             'address' => array_get($data, 'address'),
             'contact_name' => array_get($data, 'name'),
             'contact_phone' => array_get($data, 'phone'),
@@ -71,9 +71,9 @@ trait UserAddressTrait
     {
         // 判断地址是否存在
         throw_on(UserAddress::where([
-            'province_id' => array_get($data, 'province_id'),
-            'city_id' => array_get($data, 'city_id'),
-            'district_id' => array_get($data, 'district_id'),
+            'province_id' => array_get($data, 'province_id',0),
+            'city_id' => array_get($data, 'city_id',0),
+            'district_id' => array_get($data, 'district_id',0),
             'address' => array_get($data, 'address'),
             'contact_name' => array_get($data, 'name'),
             'contact_phone' => array_get($data, 'phone'),
@@ -82,9 +82,9 @@ trait UserAddressTrait
 
         // 开始新增
         $user_address->update([
-            'province_id' => array_get($data, 'province_id'),
-            'city_id' => array_get($data, 'city_id'),
-            'district_id' => array_get($data, 'district_id'),
+            'province_id' => array_get($data, 'province_id',0),
+            'city_id' => array_get($data, 'city_id',0),
+            'district_id' => array_get($data, 'district_id',0),
             'address' => array_get($data, 'address'),
             'contact_name' => array_get($data, 'name'),
             'contact_phone' => array_get($data, 'phone'),

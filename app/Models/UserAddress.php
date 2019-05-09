@@ -14,25 +14,28 @@ class UserAddress extends Model
     {
         return $this->belongsTo(User::class);
     }
+
     // 省份
     public function province()
     {
-        return $this->belongsTo(ChinaArea::class,'province_id');
+        return $this->belongsTo(ChinaArea::class, 'province_id');
     }
+
     // 城市
     public function city()
     {
-        return $this->belongsTo(ChinaArea::class,'city_id');
+        return $this->belongsTo(ChinaArea::class, 'city_id');
     }
+
     // 地区
     public function district()
     {
-        return $this->belongsTo(ChinaArea::class,'district_id');
+        return $this->belongsTo(ChinaArea::class, 'district_id');
     }
 
     public function getFullAddressAttribute()
     {
-        return "{$this->province->name}{$this->city->name}{$this->district->name}{$this->address}";
+        return "{$this->province->name}{$this->city->name}" . data_get($this, 'district.name') . "{{$this->address}";
     }
 
     // 用户收货地址
