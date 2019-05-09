@@ -40,7 +40,7 @@ class UserAddressController extends Controller
         $params = $request->fields([$this,
             'province_id',
             'city_id',
-            'district_id',
+            'district_id'=>['default'=>0],
             'address',
             'name',
             'phone',

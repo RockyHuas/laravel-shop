@@ -30,7 +30,7 @@ class UserController extends Controller
             'phone',
             'province_id',
             'city_id',
-            'district_id',
+            'district_id'=>['default'=>0],
             'password' => ['rule' => 'required|string|min:6|confirmed'],
             'open_id',
             'mini_id'

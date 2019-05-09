@@ -236,14 +236,7 @@ class OrdersController extends Controller implements ExcelDataInterface
             $grid->disableCreateButton();
             $grid->actions(function ($actions) {
                 // 禁用删除和编辑按钮
-                $actions->disableDelete();
                 $actions->disableEdit();
-            });
-            $grid->tools(function ($tools) {
-                // 禁用批量删除按钮
-                $tools->batch(function ($batch) {
-                    $batch->disableDelete();
-                });
             });
 
             $grid->filter(function ($filter) {
