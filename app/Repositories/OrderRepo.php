@@ -28,10 +28,11 @@ class OrderRepo
             // 创建订单
             $order = Order::create([
                 'user_id' => \Auth::id(),
-                'product_province'=>$province ? $province->name :'全国',
-                'product_city'=>$city ? $city->name :'全部地区',
+                'product_province' => $province ? $province->name : '全国',
+                'product_city' => $city ? $city->name : '全部地区',
                 'address' => [
-                    'address' => $address->province->name . ' ' . $address->city->name . ' ' . $address->district->name . ' ' . $address['address'],
+                    'address' => data_get($address, 'province.name') . ' ' . data_get($address, 'city.name') . ' '
+                        . data_get($address, 'district.name') . ' ' . $address['address'],
                     'contact_name' => $address['contact_name'],
                     'contact_phone' => $address['contact_phone'],
                 ],
