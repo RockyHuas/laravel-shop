@@ -63,6 +63,13 @@ class Order extends Model
                 }
             }
         });
+
+        // 订单删除则关联的 item 也要删除
+        static::deleting(function ($model) {
+            OrderItem::where('order_id', $model->id)->get()->each(function ($order_item) {
+                $order_item->delete();
+            });
+        });
     }
 
     // 订单所属用户

@@ -122,6 +122,7 @@ Route::group([
     $router->post('orders/{order}/change', 'OrdersController@change')->name('admin.orders.change');
     $router->post('orders/{order}/confirm', 'OrdersController@confirm')->name('admin.orders.confirm');
     $router->post('orders/{order}/cancel', 'OrdersController@cancel')->name('admin.orders.cancel');
+    $router->delete('orders/{id}', 'OrdersController@delete');
 
     // 管理员列表
     $router->get('admin/user', 'AdminUserController@index')->name('admin.admin.user.index');

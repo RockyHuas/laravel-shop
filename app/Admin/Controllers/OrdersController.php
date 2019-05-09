@@ -46,6 +46,20 @@ class OrdersController extends Controller implements ExcelDataInterface
         });
     }
 
+    public function delete($id)
+    {
+        \DB::transaction(function () use ($id) {
+            Order::whereIn('id', explode(',', $id))->get()->each(function ($order) {
+                $order->delete();
+            });
+        });
+
+        return response()->json([
+            'status' => true,
+            'message' => '',
+        ]);
+    }
+
     /**
      * 打印订单
      * @param Order $order
