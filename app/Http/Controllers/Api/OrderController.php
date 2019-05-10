@@ -53,13 +53,14 @@ class OrderController extends Controller
      */
     public function store(ApiRequest $request, Order $order)
     {
-        [$user_address_id, $products, $total_amount] = $request->fields([$this,
+        [$user_address_id, $products, $total_amount,$note] = $request->fields([$this,
             'user_address_id',
             'products' => ['type' => 'json'],
             'total_amount',
+            'note'
         ], true);
 
-        $result = $this->repo->createOrder($user_address_id, $products, $total_amount);
+        $result = $this->repo->createOrder($user_address_id, $products, $total_amount,$note);
 
         return ok($result);
     }

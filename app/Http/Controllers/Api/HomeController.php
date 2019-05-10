@@ -6,6 +6,7 @@ use App\Http\Requests\ApiRequest;
 use App\Models\Article;
 use App\Models\Pay;
 use App\Models\SystemSetting;
+use App\Models\UserLoginDetail;
 use App\Repositories\HomeRepo;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -39,6 +40,12 @@ class HomeController extends Controller
     public function getBanners(ApiRequest $request)
     {
         $result = $this->repo->bannerQuery();
+
+        // 在这里记录用户的登录
+        UserLoginDetail::create([
+            'user_id' => \Auth::id(),
+            'ip' => $request->ip()
+        ]);
 
         return ok($result);
     }
@@ -110,7 +117,7 @@ class HomeController extends Controller
      */
     public function getNavArticles(ApiRequest $request)
     {
-        $result=Article::where('is_rec',1)->orderBy('nav_sort','asc')->get();
+        $result = Article::where('is_rec', 1)->orderBy('nav_sort', 'asc')->get();
 
         return ok($result);
     }
@@ -122,7 +129,7 @@ class HomeController extends Controller
      */
     public function getPayments(ApiRequest $request)
     {
-        $result=Pay::get();
+        $result = Pay::get();
 
         return ok($result);
     }

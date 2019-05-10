@@ -208,4 +208,10 @@ Route::group([
     $router->get('pays/{id}/edit', 'PayController@edit');
     // 支付方式更新
     $router->put('pays/{id}', 'PayController@update');
+
+    // 产品浏览详情
+    $router->get('product_views_detail', 'ProductViewDetailController@index')->name('admin.product_views_detail.index');
+
+    // 用户登录详情
+    $router->get('user_login_detail', 'UserLoginDetailController@index')->name('admin.user_login_detail.index');
 });

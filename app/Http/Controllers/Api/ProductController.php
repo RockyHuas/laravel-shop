@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\ApiRequest;
 use App\Models\Product;
+use App\Models\ProductViewDetail;
 use App\Repositories\ProductRepo;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -39,6 +40,17 @@ class ProductController extends Controller
     public function show(ApiRequest $request, Product $product)
     {
         $product->loadMissing(['brand', 'category']);
+
+        //  产品访问数量加 1
+        $product->increment('review_count', 1);
+
+        // 保存访问记录
+        ProductViewDetail::create([
+            'user_id' => \Auth::id(),
+            'product_id' => $product->id,
+            'ip' => $request->ip()
+        ]);
+
         return ok($product);
     }
 

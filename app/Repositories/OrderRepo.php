@@ -13,9 +13,18 @@ class OrderRepo
 {
     use OrderTrait;
 
-    public function createOrder(int $user_address_id, array $products, $total_amount)
+    /**
+     * 创建订单
+     * @param int $user_address_id
+     * @param array $products
+     * @param $total_amount
+     * @param string $note
+     * @return mixed
+     * @throws \Throwable
+     */
+    public function createOrder(int $user_address_id, array $products, $total_amount, string $note = '')
     {
-        return \DB::transaction(function () use ($user_address_id, $products, $total_amount) {
+        return \DB::transaction(function () use ($user_address_id, $products, $total_amount, $note) {
             // 获取地址
             $province = '';
             $city = '';
@@ -36,7 +45,8 @@ class OrderRepo
                     'contact_name' => $address['contact_name'],
                     'contact_phone' => $address['contact_phone'],
                 ],
-                'total_amount' => $total_amount
+                'total_amount' => $total_amount,
+                'note' => $note
             ]);
 
             // 同步订单和产品的关系

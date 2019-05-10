@@ -72,7 +72,8 @@ class BannerController extends Controller
         return Admin::grid(Banner::class, function (Grid $grid) {
             $grid->id('ID')->sortable();
             $grid->title('banner名称');
-            $grid->link('banner链接');
+            $grid->link('PC 端链接');
+            $grid->mini_link('小程序链接');
             $grid->sort('banner排序');
             $grid->created_at('创建时间');
             $grid->actions(function ($actions) {
@@ -108,7 +109,8 @@ class BannerController extends Controller
             });
 
             $form->text('title', 'banner名称')->rules('required');
-            $form->text('link', 'banner链接')->rules('required');
+            $form->text('link', 'PC 端链接')->rules('required');
+            $form->text('mini_link', '小程序链接');
 
             $form->image('image', 'banner图片')->rules('required');
             $form->image('app_image', '移动端banner图片');

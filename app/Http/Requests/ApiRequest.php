@@ -47,5 +47,6 @@ class ApiRequest extends BaseRequest
         'open_id' => 'nullable|string',
         'mini_id' => 'nullable|string',
         'code' => 'required|string',
+        'note'=>'nullable|string'
     ];
 }

@@ -130,6 +130,7 @@ class ProductsController extends Controller implements ExcelDataInterface
             });
             $grid->price('价格')->editable('textarea');
             $grid->stock('剩余库存')->editable('textarea');
+            $grid->review_count('浏览次数')->sortable();
             $grid->on_sale('已上架')->editable('select', [1 => '是', 0 => '否']);
             $grid->is_hot('热卖产品')->editable('select', [1 => '是', 0 => '否']);
             $grid->is_rec('推荐产品')->editable('select', [1 => '是', 0 => '否']);
@@ -179,6 +180,7 @@ class ProductsController extends Controller implements ExcelDataInterface
 
                 // 去掉默认的id过滤器
                 $filter->disableIdFilter();
+
 
                 // 添加标题过滤
                 $filter->like('title', '商品名称');
