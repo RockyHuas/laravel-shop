@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Banner;
 use App\Models\ProductViewDetail;
+use App\Models\User;
 use Encore\Admin\Controllers\ModelForm;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
@@ -36,9 +37,20 @@ class ProductViewDetailController extends Controller
         return Admin::grid(ProductViewDetail::class, function (Grid $grid) {
             $grid->id('ID')->sortable();
             $grid->user()->name('会员名称');
+            $grid->column('省份')->display(function () {
+                $user=User::whereKey($this->user_id)->first();
+                $user->loadMissing('province');
+                return data_get($user,'province.name');
+            });
+            $grid->column('城市')->display(function () {
+                $user=User::whereKey($this->user_id)->first();
+                $user->loadMissing('city');
+                return data_get($user,'city.name');
+            });
             $grid->ip('访问来源');
             $grid->user()->phone('手机号码');
             $grid->product()->title('浏览的产品');
+            $grid->product()->review_count('产品浏览总数')->sortable();
             $grid->created_at('浏览时间');
             $grid->actions(function ($actions) {
                 $actions->disableDelete();

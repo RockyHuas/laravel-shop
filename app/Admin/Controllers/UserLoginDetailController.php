@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Banner;
 use App\Models\ProductViewDetail;
+use App\Models\User;
 use App\Models\UserLoginDetail;
 use Encore\Admin\Controllers\ModelForm;
 use Encore\Admin\Facades\Admin;
@@ -37,6 +38,16 @@ class UserLoginDetailController extends Controller
         return Admin::grid(UserLoginDetail::class, function (Grid $grid) {
             $grid->id('ID')->sortable();
             $grid->user()->name('会员名称');
+            $grid->column('会员所属省份')->display(function () {
+                $user=User::whereKey($this->user_id)->first();
+                $user->loadMissing('province');
+                return data_get($user,'province.name');
+            });
+            $grid->column('会员所属城市')->display(function () {
+                $user=User::whereKey($this->user_id)->first();
+                $user->loadMissing('city');
+                return data_get($user,'city.name');
+            });
             $grid->ip('访问来源');
             $grid->user()->phone('手机号码');
             $grid->created_at('登录时间');
