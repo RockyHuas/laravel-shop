@@ -14,7 +14,7 @@
                 <tbody>
                 <tr colspan="3">
                     <td>买家：</td>
-                    <td colspan="3">{{ $order->user->name }}</td>
+                    <td colspan="3">{{ data_get($order,'user.name')}}</td>
                 </tr>
                 {{--如果支付还没有发货，则可以修改地址信息--}}
                 @if($order->ship_status == \App\Models\Order::SHIP_STATUS_PENDING )
