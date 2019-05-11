@@ -33,7 +33,7 @@ class Order extends Model
     ];
 
     protected $guarded = ['id'];
-    protected $appends = ['shipping_status', 'paid_status', 'created_time', 'number_status'];
+    protected $appends = ['shipping_status', 'paid_status', 'created_time', 'number_status','total_num'];
 
     protected $casts = [
         'closed' => 'boolean',
@@ -141,10 +141,15 @@ class Order extends Model
     {
         return $this->paid_at ? '已支付' : ($this->closed ? '已取消' : '未支付');
     }
-
     public function getCreatedTimeAttribute()
     {
         return $this->created_at->toDateString();
+    }
+
+    public function getTotalNumAttribute()
+    {
+        $items=$this->items;
+        return $items->sum('amount');
     }
 
     public function getNumberStatusAttribute()
