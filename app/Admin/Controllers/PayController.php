@@ -108,7 +108,12 @@ class PayController extends Controller
 
             $form->image('logo', '支付方式LOGO')->rules('required');
 
-            $form->editor('description', '支付信息')->rules('required');
+            $form->image('scan', '支付二维码');
+
+            // 扫码
+            $form->radio('is_scan', '支付形式')->options(['1' => '扫码', '0' => '非扫码'])->default('0');
+
+            $form->editor('description', '支付信息');
         });
     }
 

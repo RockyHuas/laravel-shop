@@ -8,12 +8,19 @@ use Illuminate\Support\Str;
 class Pay extends Model
 {
     protected $guarded=['id'];
-    protected $appends=['logo_url'];
+    protected $appends=['logo_url','scan_url'];
 
     // LOGO
     public function getLogoUrlAttribute()
     {
         return $this->imageUrLConvert($this->attributes['logo']);
+    }
+
+    public function getScanUrlAttribute()
+    {
+        return $this->attributes['scan'] ?
+        $this->imageUrLConvert($this->attributes['scan'])
+        :'';
     }
 
     /**
