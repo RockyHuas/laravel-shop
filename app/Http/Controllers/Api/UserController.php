@@ -70,7 +70,7 @@ class UserController extends Controller
     public function getUserInfo(ApiRequest $request)
     {
         $user = \Auth::user();
-        $user->loadMissing(['province:id,name','city:id,name','province:id,name'])
+        $user->loadMissing(['province:id,name','city:id,name','province:id,name']);
 
         $user->addHidden('password');
 
