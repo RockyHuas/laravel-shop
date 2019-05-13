@@ -142,6 +142,7 @@ class HomeController extends Controller
      */
     public function getArticleInfo(ApiRequest $request, Article $article)
     {
+        $article->app_description=str_replace('source','',$article->app_description);
         return ok($article);
     }
 }
