@@ -140,6 +140,13 @@ class Handler extends ExceptionHandler
                     'file' => $exception->getFile() . ':' . $exception->getLine()
                 ]);
             }
+            return response()->json([
+                'code' => 401,
+                'data' => null,
+                'message' => '未授权，请重新登录',
+                'error' => $exception->getTraceAsString(),
+                'file' => $exception->getFile() . ':' . $exception->getLine()
+            ]);
 
         }
 
