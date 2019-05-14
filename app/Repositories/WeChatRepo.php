@@ -23,13 +23,6 @@ class WeChatRepo
             ],
             [
                 "type" => "miniprogram",
-                "name" => "公司介绍",
-                "url" => "http://mp.weixin.qq.com",
-                "appid" => "wx59db07f0641ebbb5",
-                "pagepath" => "/pages/paycart/paycart?id=8"
-            ],
-            [
-                "type" => "miniprogram",
                 "name" => "付款账号",
                 "url" => "http://mp.weixin.qq.com",
                 "appid" => "wx59db07f0641ebbb5",

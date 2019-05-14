@@ -22,7 +22,7 @@ class OrderRepo
      * @return mixed
      * @throws \Throwable
      */
-    public function createOrder(int $user_address_id, array $products, $total_amount, string $note = '')
+    public function createOrder(int $user_address_id, array $products, $total_amount, $note = '')
     {
         return \DB::transaction(function () use ($user_address_id, $products, $total_amount, $note) {
             // 获取地址
