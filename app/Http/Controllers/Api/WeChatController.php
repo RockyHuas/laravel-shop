@@ -3,12 +3,19 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
+use App\Repositories\WeChatRepo;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ApiRequest;
 
 class WeChatController extends Controller
 {
+    protected $repo;
+    
+    public function __construct(WeChatRepo $repo)
+    {
+        $this->repo=$repo;
+    }
     /**
      * 生成扫描二维码
      * @return \Illuminate\Http\JsonResponse
@@ -21,6 +28,18 @@ class WeChatController extends Controller
         $qrcodeUrl = $wechat->qrcode->url($result['ticket']);
 
         return ok($qrcodeUrl);
+    }
+
+    /**
+     * 生成微信公众号菜单
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function createMenu()
+    {
+        $result=$this->repo->createMenu();
+
+        return ok($result);
+
     }
 
     // 小程序 open_id
