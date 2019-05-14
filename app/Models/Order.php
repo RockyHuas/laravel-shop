@@ -102,8 +102,9 @@ class Order extends Model
     public static function findAvailableNo()
     {
         for ($i = 0; $i < 10; $i++) {
-            $orders = static::query()->whereDate('created_at', now()->toDateString())->latest()->get()->sortByDesc('id')->values();
-            $order=data_get($orders,'0','');
+            $order= static::query()
+                ->whereDate('created_at', now()->toDateString())
+                ->orderBy('id','DESC')->first();
             $no = $order ? ($order->no) + 1 : date('Ymd') . '0000';
             // 判断是否已经存在
             if (!static::query()->where('no', $no)->exists()) {
