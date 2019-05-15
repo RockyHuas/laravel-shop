@@ -5,6 +5,10 @@ namespace App\Providers;
 use App\Exceptions\Handler;
 use App\Extensions\Libs\RequestExtension;
 use App\Extensions\Paginator\TchLengthAwarePaginator;
+use App\Models\Order;
+use App\Models\User;
+use App\Observers\OrderObserver;
+use App\Observers\UserObserver;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Monolog\Logger;
@@ -41,6 +45,9 @@ class AppServiceProvider extends ServiceProvider
             extract($arguments);
             return new TchLengthAwarePaginator($items, $total, $perPage, $currentPage, $options);
         });
+
+        User::observe(UserObserver::class);
+        Order::observe(OrderObserver::class);
     }
 
     /**
@@ -57,7 +64,7 @@ class AppServiceProvider extends ServiceProvider
             $config['return_url'] = route('payment.alipay.return');
             // 判断当前项目运行环境是否为线上环境
             if (app()->environment() !== 'production') {
-                $config['mode']         = 'dev';
+                $config['mode'] = 'dev';
                 $config['log']['level'] = Logger::DEBUG;
             } else {
                 $config['log']['level'] = Logger::WARNING;
