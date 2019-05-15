@@ -39,13 +39,23 @@ class ProductViewDetailController extends Controller
             $grid->user()->name('会员名称');
             $grid->column('省份')->display(function () {
                 $user=User::whereKey($this->user_id)->first();
-                $user->loadMissing('province');
-                return data_get($user,'province.name');
+                if($user){
+                    $user->loadMissing('province');
+                    return data_get($user,'province.name');
+                } else {
+                    return '';
+                }
+
             });
             $grid->column('城市')->display(function () {
                 $user=User::whereKey($this->user_id)->first();
-                $user->loadMissing('city');
-                return data_get($user,'city.name');
+                if($user){
+                    $user->loadMissing('city');
+                    return data_get($user,'city.name');
+                } else {
+                    return '';
+                }
+
             });
             $grid->ip('访问来源');
             $grid->user()->phone('手机号码');
