@@ -105,6 +105,8 @@ class UserController extends Controller implements ExcelDataInterface
             });
             // 导出商品
             $grid->exporter(new ExcelExpoter($this));
+            // 默认按用户 id 倒序
+            $grid->model()->orderBy('id', 'desc');
 
             $grid->filter(function ($filter) {
 
@@ -113,6 +115,13 @@ class UserController extends Controller implements ExcelDataInterface
 
                 // 添加标题过滤
                 $filter->like('phone', '手机号码');
+
+                // 审核状态过滤
+                $filter->equal('status', '审核状态')->radio([
+                    '' => '所有',
+                    1 => '是',
+                    0 => '否',
+                ]);
 
                 $filter->in('province_id', '产品所属省份')->multipleSelect('/admin/area/province')->load('city', '/admin/area/city');
 
