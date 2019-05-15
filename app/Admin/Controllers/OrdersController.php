@@ -106,17 +106,18 @@ class OrdersController extends Controller implements ExcelDataInterface
                 $pay_status = $order->paid_at ? '已支付' : '未支付';
                 $order_pay_total = $order->pay_amount;
                 $note = $order->note;
+                $pay_note = $order->pay_note;
                 $order_time = $order->created_at->toDateTimeString();
                 return compact('no', 'user_name', 'contact_name',
                     'address', 'contact_phone', 'product_name', 'product_price',
                     'product_amount', 'brand_name', 'province_name', 'city_name',
                     'order_total', 'pay_status', 'order_pay_total',
-                    'note', 'order_time');
+                    'note', 'pay_note', 'order_time');
 
             });
         })->flatten(1)->prepend(['订单编号', '买家', '收货人', '联系地址', '手机号码',
             '商品名称', '商品价格', '商品数量', '品牌', '省份', '城市',
-            '订单总额', '支付状态', '支付金额', '订单备注', '订单创建时间']);
+            '订单总额', '支付状态', '支付金额', '订单备注', '支付备注', '订单创建时间']);
     }
 
     public function ship(Order $order, Request $request)
@@ -161,7 +162,7 @@ class OrdersController extends Controller implements ExcelDataInterface
         \DB::transaction(function () use (
             $order, $product, $pay_id, $address,
             $contact_name, $contact_phone, $express_company, $express_no,
-            $pay_amount, $note,$pay_note
+            $pay_amount, $note, $pay_note
         ) {
             // 如果存在需要更新的产品信息，则更新
             $product && collect($product)->each(function ($item, $key) {
