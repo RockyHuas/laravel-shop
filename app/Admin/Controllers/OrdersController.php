@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Extensions\ExcelDataInterface;
 use App\Admin\Extensions\ExcelExpoter;
+use App\Events\OrderShipped;
 use App\Exceptions\InternalException;
 use App\Models\ChinaArea;
 use App\Models\Order;
@@ -155,11 +156,12 @@ class OrdersController extends Controller implements ExcelDataInterface
         $express_no = $request->express_no;
         $pay_amount = $request->pay_amount;
         $note = $request->note;
+        $pay_note = $request->pay_note;
 
         \DB::transaction(function () use (
             $order, $product, $pay_id, $address,
             $contact_name, $contact_phone, $express_company, $express_no,
-            $pay_amount, $note
+            $pay_amount, $note,$pay_note
         ) {
             // 如果存在需要更新的产品信息，则更新
             $product && collect($product)->each(function ($item, $key) {
@@ -168,6 +170,7 @@ class OrdersController extends Controller implements ExcelDataInterface
 
             $update_data = [];
             $update_data['note'] = $note;
+            $update_data['pay_note'] = $pay_note;
             // 如果提交了支付信息
             if ($pay_id) {
                 $update_data['pay_id'] = $pay_id;
@@ -191,6 +194,11 @@ class OrdersController extends Controller implements ExcelDataInterface
             }
             // 更新订单信息
             $order->update($update_data);
+
+            // 如果发货了，需要发微信通知
+            if ($express_no && $express_company) {
+                event(new OrderShipped($order));
+            }
         });
 
         // 返回上一页

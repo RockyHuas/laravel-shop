@@ -180,7 +180,13 @@
                                 <textarea type="text" id="express_company" name="note"
                                           class="form-control" placeholder="输入订单备注">{{ $order->note }}</textarea>
                             </div>
+                            <div class="form-group " style="margin-left: 20px;">
+                                <label for="express_company" class="control-label">支付备注:</label>
+                                <textarea type="text" id="express_company" name="pay_note"
+                                          class="form-control" placeholder="输入支付备注">{{ $order->pay_note }}</textarea>
+                            </div>
                         </div>
+
                     </td>
                 </tr>
                 </tbody>

@@ -30,6 +30,10 @@ class EventServiceProvider extends ServiceProvider
         OrderReviewd::class => [
             UpdateProductRating::class,
         ],
+        // 订单发货事件
+        'App\Events\OrderShipped' => [
+            'App\Listeners\SendShipmentNotification',
+        ],
     ];
 
     /**
