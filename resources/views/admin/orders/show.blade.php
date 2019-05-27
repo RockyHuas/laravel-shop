@@ -197,14 +197,10 @@
                    class="btn btn-success">打印订单</a>
 
                 @if($order->ship_status == \App\Models\Order::SHIP_STATUS_DELIVERED )
-
                     <button style="margin-left: 20px;" type="button"  value="{{ route('admin.orders.confirm', [$order->id]) }}" class="confirm btn btn-success">完成</button>
                 @endif
-                @if(!$order->paid_at)
                     <button style="margin-left: 20px;" type="button"  value="{{ route('admin.orders.cancel', [$order->id]) }}" class="cancel btn btn-success">作废</button>
-                @endif
                 @if($order->ship_status != \App\Models\Order::SHIP_STATUS_RECEIVED )
-
                     <button style="margin-left: 20px;" type="submit" class="btn btn-success">保存</button>
                 @endif
 

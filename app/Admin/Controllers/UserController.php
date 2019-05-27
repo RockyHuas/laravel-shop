@@ -10,11 +10,13 @@ use App\Models\ChinaArea;
 use App\Models\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\UserAddress;
 use Encore\Admin\Controllers\ModelForm;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
+use Encore\Admin\Widgets\Table;
 use Illuminate\Http\Request;
 use Illuminate\Support\MessageBag;
 use Maatwebsite\Excel\Excel;
@@ -83,7 +85,17 @@ class UserController extends Controller implements ExcelDataInterface
             // 创建一个列名为 ID 的列，内容是用户的 id 字段，并且可以在前端页面点击排序
             $grid->id('ID')->sortable();
             // 创建一个列名为 用户名 的列，内容是用户的 name 字段。下面的 email() 和 created_at() 同理
-            $grid->name('用户名');
+            $grid->name('用户名')->modal('收货地址信息', function ($model) {
+                $user_addresses=UserAddress::whereUserId($model->id)->get()->map(function($user_address)use($model){
+                    $contact_name=$user_address->contact_name;
+                    $contact_phone=$user_address->contact_phone;
+                    $address=$user_address->full_address;
+                    $default=$model->user_address_id == $user_address->id ? '是':'否';
+                    return compact('contact_name','contact_phone','address','default');
+                });
+                return new Table(['收货人', '联系方式', '收货地址','是否默认地址'], $user_addresses->toArray());
+            });
+
             $grid->phone('手机号码');
             $grid->union_id('是否绑定微信')->display(function ($value) {
                 return $value ? '是' : '否';

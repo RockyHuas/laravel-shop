@@ -141,7 +141,7 @@ class Order extends Model
 
     public function getPaidStatusAttribute()
     {
-        return $this->paid_at ? '已支付' : ($this->closed ? '已取消' : '未支付');
+        return $this->paid_at && !$this->closed ? '已支付' : ($this->paid_at ? '已取消' : '未支付');
     }
     public function getCreatedTimeAttribute()
     {
