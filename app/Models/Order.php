@@ -33,7 +33,7 @@ class Order extends Model
     ];
 
     protected $guarded = ['id'];
-    protected $appends = ['shipping_status', 'paid_status', 'created_time', 'number_status','total_num'];
+    protected $appends = ['shipping_status', 'paid_status', 'created_time', 'number_status', 'total_num'];
 
     protected $casts = [
         'closed' => 'boolean',
@@ -102,9 +102,9 @@ class Order extends Model
     public static function findAvailableNo()
     {
         for ($i = 0; $i < 10; $i++) {
-            $order= static::query()
+            $order = static::query()
                 ->whereDate('created_at', now()->toDateString())
-                ->orderBy('id','DESC')->first();
+                ->orderBy('id', 'DESC')->first();
             $no = $order ? ($order->no) + 1 : date('Ymd') . '0000';
             // 判断是否已经存在
             if (!static::query()->where('no', $no)->exists()) {
@@ -141,8 +141,9 @@ class Order extends Model
 
     public function getPaidStatusAttribute()
     {
-        return $this->paid_at && !$this->closed ? '已支付' : ($this->paid_at ? '已取消' : '未支付');
+        return $this->closed ? '已取消' : ($this->paid_at ? '已支付' : '未支付');
     }
+
     public function getCreatedTimeAttribute()
     {
         return $this->created_at->toDateString();
@@ -150,7 +151,7 @@ class Order extends Model
 
     public function getTotalNumAttribute()
     {
-        $items=$this->items;
+        $items = $this->items;
         return $items->sum('amount');
     }
 
