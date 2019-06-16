@@ -123,6 +123,7 @@ class SystemSettingController extends Controller
             $form->image('xiaochengxu', '小程序二维码');
             $form->text('service', '在线客服');
             $form->text('icp', 'ICP 备案信息');
+            $form->radio('is_login', '是否登录才能访问')->options(['1' => '是', '0' => '否'])->default('0');
         });
     }
 
