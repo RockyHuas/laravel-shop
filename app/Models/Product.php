@@ -38,16 +38,21 @@ class Product extends Model
      */
     public function scopeCity($query)
     {
-        $user = \Auth::user();
-        return $query->where(function ($query2) use ($user) {
-            $query2->where(function ($province_query) use ($user) {
-                $province_query->whereNull('province')
-                    ->orWhereIn('province', [0, $user->province_id]);
-            })->where(function ($city_query) use ($user) {
-                $city_query->whereNull('city')
-                    ->orWhereIn('city', [0, $user->city_id]);
-            });
-        });
+        if(\Auth::check()){
+            $user = \Auth::user();
+            return $query->where(function ($query2) use ($user) {
+                $query2->where(function ($province_query) use ($user) {
+                    $province_query->whereNull('province')
+                        ->orWhereIn('province', [0, $user->province_id]);
+                })->where(function ($city_query) use ($user) {
+                    $city_query->whereNull('city')
+                        ->orWhereIn('city', [0, $user->city_id]);
+                });
+            });    
+        } else {
+            return $query;
+        }
+        
     }
 
     // PC 端图片

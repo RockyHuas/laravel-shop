@@ -25,6 +25,13 @@ class OrderRepo
     public function createOrder(int $user_address_id, array $products, $total_amount, $note = '')
     {
         return \DB::transaction(function () use ($user_address_id, $products, $total_amount, $note) {
+            
+            collect($products)->each(function ($item) {
+                $product=Product::whereKey($item['product_id'])
+                ->where('on_sale',1)->first()
+                throw_on(!$product,'产品已下架');
+            });
+
             // 获取地址
             $province = '';
             $city = '';

@@ -74,27 +74,26 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api', 'middleware' => 
     // 产品分类
     $api->get('product/categories', 'ProductController@getCategories');
 
+    // banner
+    $api->get('banners', 'HomeController@getBanners');
+    // 广告
+    $api->get('home/ads', 'HomeController@getAds');
+    // 推荐首页品牌
+    $api->get('home/brands', 'HomeController@getRecBrands');
+    // 推荐商品
+    $api->get('home/rec_products', 'HomeController@getRecProducts');
+    // 劲爆产品
+    $api->get('home/hot_products', 'HomeController@getHotProducts');
+    // 产品品牌
+    $api->get('product/brands', 'ProductController@getBrands');
+    // 产品价格
+    $api->get('product/prices', 'ProductController@getPrices');
+    // 商品列表
+    $api->get('products', 'ProductController@getProducts');
+    // 商品详细
+    $api->get('products/{product}/detail', 'ProductController@show');
+
     $api->group(['middleware' => ['api.auth', 'user_active']], function ($api) {
-
-        // banner
-        $api->get('banners', 'HomeController@getBanners');
-        // 广告
-        $api->get('home/ads', 'HomeController@getAds');
-        // 推荐首页品牌
-        $api->get('home/brands', 'HomeController@getRecBrands');
-        // 推荐商品
-        $api->get('home/rec_products', 'HomeController@getRecProducts');
-        // 劲爆产品
-        $api->get('home/hot_products', 'HomeController@getHotProducts');
-
-        // 产品品牌
-        $api->get('product/brands', 'ProductController@getBrands');
-        // 产品价格
-        $api->get('product/prices', 'ProductController@getPrices');
-        // 商品列表
-        $api->get('products', 'ProductController@getProducts');
-        // 商品详细
-        $api->get('products/{product}/detail', 'ProductController@show');
         // 购物车列表
         $api->get('cart/products', 'CartController@getProducts');
         // 购物车商品添加

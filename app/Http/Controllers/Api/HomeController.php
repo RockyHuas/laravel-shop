@@ -42,10 +42,12 @@ class HomeController extends Controller
         $result = $this->repo->bannerQuery();
 
         // 在这里记录用户的登录
-        UserLoginDetail::create([
-            'user_id' => \Auth::id(),
-            'ip' => $request->ip()
-        ]);
+        if(\Auth::check()){
+            UserLoginDetail::create([
+                'user_id' => \Auth::id(),
+                'ip' => $request->ip()
+            ]);    
+        }
 
         return ok($result);
     }
