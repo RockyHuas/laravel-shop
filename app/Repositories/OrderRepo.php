@@ -28,7 +28,7 @@ class OrderRepo
             
             collect($products)->each(function ($item) {
                 $product=Product::whereKey($item['product_id'])
-                ->where('on_sale',1)->first()
+                ->where('on_sale',1)->first();
                 throw_on(!$product,'产品已下架');
             });
 
