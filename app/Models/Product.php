@@ -38,7 +38,7 @@ class Product extends Model
      */
     public function scopeCity($query)
     {
-        if(\Auth::check()){
+        if(\Auth::guard('api')->check()){
             $user = \Auth::user();
             return $query->where(function ($query2) use ($user) {
                 $query2->where(function ($province_query) use ($user) {

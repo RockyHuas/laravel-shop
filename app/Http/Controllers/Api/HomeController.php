@@ -40,9 +40,8 @@ class HomeController extends Controller
     public function getBanners(ApiRequest $request)
     {
         $result = $this->repo->bannerQuery();
-
         // 在这里记录用户的登录
-        if(\Auth::check()){
+        if(\Auth::guard('api')->check()){
             UserLoginDetail::create([
                 'user_id' => \Auth::id(),
                 'ip' => $request->ip()

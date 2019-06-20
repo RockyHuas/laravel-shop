@@ -44,7 +44,7 @@ class ProductController extends Controller
         //  产品访问数量加 1
         $product->increment('review_count', 1);
 
-        if(\Auth::check()){
+        if(\Auth::guard('api')->check()){
             // 保存访问记录
             ProductViewDetail::create([
                 'user_id' => \Auth::id(),
