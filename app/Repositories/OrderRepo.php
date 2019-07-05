@@ -25,19 +25,21 @@ class OrderRepo
     public function createOrder(int $user_address_id, array $products, $total_amount, $note = '')
     {
         return \DB::transaction(function () use ($user_address_id, $products, $total_amount, $note) {
-            
-            collect($products)->each(function ($item) {
-                $product=Product::whereKey($item['product_id'])
-                ->where('on_sale',1)->first();
-                throw_on(!$product,'产品已下架');
+
+            $products = collect($products)->map(function ($item) {
+                $product = Product::whereKey($item['product_id'])
+                    ->where('on_sale', 1)->first();
+                throw_on(!$product, '产品已下架');
+                $product->total_amount = $item['amount'];
+                $product->total_price = $product->price * $item['amount'];
+                return $product;
             });
 
             // 获取地址
             $province = '';
             $city = '';
             $address = UserAddress::with(['province', 'city', 'district'])->whereKey($user_address_id)->firstOrFail();
-            $product_id = array_get($products, '0.product_id');
-            $product = Product::whereKey($product_id)->first();
+            $product = $products->first();
             $product->province && $province = ChinaArea::whereKey($product->province)->first();
 
             $product->city && $city = ChinaArea::whereKey($product->city)->first();
@@ -52,16 +54,16 @@ class OrderRepo
                     'contact_name' => $address['contact_name'],
                     'contact_phone' => $address['contact_phone'],
                 ],
-                'total_amount' => $total_amount,
+                'total_amount' => $products->sum('total_price'),
                 'note' => $note
             ]);
 
             // 同步订单和产品的关系
-            collect($products)->each(function ($item) use ($order) {
+            $products->each(function ($item) use ($order) {
                 OrderItem::create([
-                    'product_id' => $item['product_id'],
-                    'amount' => $item['amount'],
-                    'price' => $item['price'],
+                    'product_id' => $item->id,
+                    'amount' => $item->total_amount,
+                    'price' => $item->price,
                     'order_id' => $order->id
                 ]);
             });
