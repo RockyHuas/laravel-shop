@@ -17,6 +17,6 @@ trait brandTrait
     {
         return Brand::when($rec,function ($query,$value){
             $query->where('is_rec', 1);
-        })->orderBy('sort', 'ASC')->get();
+        })->orderBy('sort', 'ASC')->get(['id','title','image','app_image']);
     }
 }

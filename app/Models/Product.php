@@ -58,13 +58,13 @@ class Product extends Model
     // PC 端图片
     public function getImageUrlAttribute()
     {
-        return $this->attributes['image'] ? $this->imageUrLConvert($this->attributes['image']) : null;
+        return data_get($this,'image') ? $this->imageUrLConvert($this->attributes['image']) : null;
     }
 
     // 移动端图片
     public function getAppImageUrlAttribute()
     {
-        return $this->attributes['app_image']
+        return data_get($this,'app_image')
             ? $this->imageUrLConvert($this->attributes['app_image'])
             : $this->getImageUrlAttribute();
     }
@@ -72,22 +72,22 @@ class Product extends Model
     // PC 端多图片
     public function getImagesUrlAttribute()
     {
-        $images = $this->getAttribute('images') ?: Arr::wrap($this->getAttribute('image'));
+        $images = data_get($this,'images') ?: Arr::wrap($this->getAttribute('image'));
 
         return collect($images)->map(function ($image) {
             return $image ? $this->imageUrLConvert($image) : null;
-        });
+        })->filter();
     }
 
     // 移动端多图片
     public function getAppImagesUrlAttribute()
     {
-        $images = $this->getAttribute('app_images');
+        $images = data_get($this,'app_images');
 
         return $images
             ? collect($images)->map(function ($image) {
                 return $this->imageUrLConvert($image);
-            })
+            })->filter()
             : $this->getImagesUrlAttribute();
     }
 

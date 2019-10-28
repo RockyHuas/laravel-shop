@@ -104,7 +104,7 @@ class ProductController extends Controller
             'brand_id' => ['default' => 0],
             'min_price',
             'max_price',
-            'sort',
+            'sort'=>['default'=>0],
             'sort_order'
         ], true);
 

@@ -321,9 +321,9 @@ class ProductsController extends Controller implements ExcelDataInterface
                 })->toArray();
                 $form->select('brand_id', '品牌')->options($brands)->rules('required');
                 // 创建一个选择图片的框
-                $form->image('image', '封面图')->rules('required|image');
+                $form->image('image', '封面图')->uniqueName()->rules('required|image');
                 // 创建一个选择图片的框，移动端图片
-                $form->image('app_image', '移动端封面图')->rules('nullable|image');
+                $form->image('app_image', '移动端封面图')->uniqueName()->rules('nullable|image');
                 // 价格
                 $form->text('price', '单价')->rules('required|numeric|min:0.01');
                 // 库存
@@ -334,8 +334,8 @@ class ProductsController extends Controller implements ExcelDataInterface
                 $form->radio('on_sale', '上架')->options(['1' => '是', '0' => '否'])->default('1');
 
             })->tab('详细信息', function ($form) {
-                $form->multipleImage('images', '滑动图')->removable();
-                $form->multipleImage('app_images', '移动端滑动图')->removable();
+                $form->multipleImage('images', '滑动图')->uniqueName()->removable();
+                $form->multipleImage('app_images', '移动端滑动图')->uniqueName()->removable();
                 // 创建一个富文本编辑器
                 $form->editor('description', '商品描述');
                 // 创建一个富文本编辑器，移动端
