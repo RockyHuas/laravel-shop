@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Foundation\Http\Exceptions\MaintenanceModeException;
 use Illuminate\Routing\Exceptions\InvalidSignatureException;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -62,100 +63,109 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        // if ($exception instanceof ErrorException) {
-        //     return parent::render($request, $exception);
-        // } else
-        if ($exception instanceof MethodNotAllowedHttpException) {
-            return response()->json([
-                'code' => 403,
-                'data' => null,
-                'message' => '接口禁止访问',
-                'error' => $exception->getMessage(),
-                'file' => $exception->getFile() . ':' . $exception->getLine()
-            ]);
-        } elseif ($exception instanceof ValidationException) {
-            return response()->json([
-                'code' => $exception->getCode() ?: 500,
-                'data' => null,
-                'message' => head($exception->errors())[0],
-                'error' => $exception->getTraceAsString(),
-                'file' => $exception->getFile() . ':' . $exception->getLine()
-            ]);
-        } elseif ($exception instanceof ModelNotFoundException) {
-            return response()->json([
-                'code' => $exception->getCode() ?: 500,
-                'data' => null,
-                'message' => '查询结果为空',
-                'error' => $exception->getTraceAsString(),
-                'file' => $exception->getFile() . ':' . $exception->getLine()
-            ]);
-        } elseif ($exception instanceof NotFoundHttpException) {
-            return response()->json([
-                'code' => $exception->getCode() ?: 404,
-                'data' => null,
-                'message' => '参数错误',
-                'error' => $exception->getTraceAsString(),
-                'file' => $exception->getFile() . ':' . $exception->getLine()
-            ]);
-        } elseif ($exception instanceof InvalidSignatureException) {
-            return response()->json([
-                'code' => $exception->getCode() ?: 500,
-                'data' => null,
-                'message' => '签名无效',
-                'error' => $exception->getTraceAsString(),
-                'file' => $exception->getFile() . ':' . $exception->getLine()
-            ]);
-        } elseif ($exception instanceof AuthorizationException) {
-            return response()->json([
-                'code' => $exception->getCode() ?: 402,
-                'data' => null,
-                'message' => '抱歉，您无权访问',
-                'error' => $exception->getTraceAsString(),
-                'file' => $exception->getFile() . ':' . $exception->getLine()
-            ]);
-        } elseif ($exception instanceof MaintenanceModeException) {
-            return response()->json([
-                'code' => $exception->getCode() ?: 500,
-                'data' => null,
-                'message' => '系统正在维护中……',
-                'error' => $exception->getTraceAsString(),
-                'file' => $exception->getFile() . ':' . $exception->getLine()
-            ]);
-        } elseif ($exception instanceof UnauthorizedHttpException) {
-            if ($exception->getPrevious() instanceof TokenExpiredException) {
+        if (Str::is('admin/*', $request->route()->uri())) {
+            return parent::render($request, $exception);
+        } else {
+            if ($exception instanceof MethodNotAllowedHttpException) {
                 return response()->json([
-                    'code' => 401,
+                    'code' => 403,
                     'data' => null,
-                    'message' => 'Token 已过期，请重新登录',
+                    'message' => '接口禁止访问',
+                    'error' => $exception->getMessage(),
+                    'file' => $exception->getFile() . ':' . $exception->getLine()
+                ]);
+            } elseif ($exception instanceof ValidationException) {
+                return response()->json([
+                    'code' => $exception->getCode() ?: 500,
+                    'data' => null,
+                    'message' => head($exception->errors())[0],
                     'error' => $exception->getTraceAsString(),
                     'file' => $exception->getFile() . ':' . $exception->getLine()
                 ]);
-            }
-            if ($exception->getPrevious() instanceof TokenInvalidException) {
+            } elseif ($exception instanceof ModelNotFoundException) {
                 return response()->json([
-                    'code' => 401,
+                    'code' => $exception->getCode() ?: 500,
                     'data' => null,
-                    'message' => 'Token 已过期，请重新登录',
+                    'message' => '查询结果为空',
                     'error' => $exception->getTraceAsString(),
                     'file' => $exception->getFile() . ':' . $exception->getLine()
                 ]);
-            }
-            return response()->json([
-                'code' => 401,
-                'data' => null,
-                'message' => '未授权，请重新登录',
-                'error' => $exception->getTraceAsString(),
-                'file' => $exception->getFile() . ':' . $exception->getLine()
-            ]);
+            } elseif ($exception instanceof NotFoundHttpException) {
+                return response()->json([
+                    'code' => $exception->getCode() ?: 404,
+                    'data' => null,
+                    'message' => '参数错误',
+                    'error' => $exception->getTraceAsString(),
+                    'file' => $exception->getFile() . ':' . $exception->getLine()
+                ]);
+            } elseif ($exception instanceof InvalidSignatureException) {
+                return response()->json([
+                    'code' => $exception->getCode() ?: 500,
+                    'data' => null,
+                    'message' => '签名无效',
+                    'error' => $exception->getTraceAsString(),
+                    'file' => $exception->getFile() . ':' . $exception->getLine()
+                ]);
+            } elseif ($exception instanceof AuthorizationException) {
+                return response()->json([
+                    'code' => $exception->getCode() ?: 402,
+                    'data' => null,
+                    'message' => '抱歉，您无权访问',
+                    'error' => $exception->getTraceAsString(),
+                    'file' => $exception->getFile() . ':' . $exception->getLine()
+                ]);
+            } elseif ($exception instanceof MaintenanceModeException) {
+                return response()->json([
+                    'code' => $exception->getCode() ?: 500,
+                    'data' => null,
+                    'message' => '系统正在维护中……',
+                    'error' => $exception->getTraceAsString(),
+                    'file' => $exception->getFile() . ':' . $exception->getLine()
+                ]);
+            } elseif ($exception instanceof UnauthorizedHttpException) {
+                if ($exception->getPrevious() instanceof TokenExpiredException) {
+                    return response()->json([
+                        'code' => 401,
+                        'data' => null,
+                        'message' => 'Token 已过期，请重新登录',
+                        'error' => $exception->getTraceAsString(),
+                        'file' => $exception->getFile() . ':' . $exception->getLine()
+                    ]);
+                }
+                if ($exception->getPrevious() instanceof TokenInvalidException) {
+                    return response()->json([
+                        'code' => 401,
+                        'data' => null,
+                        'message' => 'Token 已过期，请重新登录',
+                        'error' => $exception->getTraceAsString(),
+                        'file' => $exception->getFile() . ':' . $exception->getLine()
+                    ]);
+                }
+                return response()->json([
+                    'code' => 401,
+                    'data' => null,
+                    'message' => '未授权，请重新登录',
+                    'error' => $exception->getTraceAsString(),
+                    'file' => $exception->getFile() . ':' . $exception->getLine()
+                ]);
 
+            } elseif ($exception instanceof DecryptException) {
+                return response()->json([
+                    'code' => 500,
+                    'data' => null,
+                    'message' => '请重新操作',
+                    'error' => $exception->getTraceAsString(),
+                    'file' => $exception->getFile() . ':' . $exception->getLine()
+                ]);
+            }
+
+            return response()->json([
+                'code' => $exception->getCode() ?: 500,
+                'data' => null,
+                'message' => $exception->getMessage(),
+                'error' => $exception->getTraceAsString(),
+                'file' => $exception->getFile() . ':' . $exception->getLine()
+            ]);
         }
-
-        return response()->json([
-            'code' => $exception->getCode() ?: 500,
-            'data' => null,
-            'message' => $exception->getMessage(),
-            'error' => $exception->getTraceAsString(),
-            'file' => $exception->getFile() . ':' . $exception->getLine()
-        ]);
     }
 }
