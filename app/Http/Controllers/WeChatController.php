@@ -21,19 +21,20 @@ class WeChatController extends Controller
                 Log::info('open_id：' . $openid);
                 $user = User::where('open_id', $openid)->first();
 
+                $EventKey=str_replace('qrscene_','',$message['EventKey']);
                 // 如果用户存在
                 if ($user) {
                     Log::info('用户存在，登录');
                     $token = \Auth::guard('api')->fromUser($user);
 
                     // 广播扫码登录的消息，以便前端处理
-                    event(new WechatScanLogin($openid,'Bearer ' . $token));
+                    event(new WechatScanLogin($EventKey,$openid,'Bearer ' . $token));
 
                     Log::info('登录成功了');
                     return '扫码成功！';
                 } else { // 用户不存在,返回 open_id
                     Log::info('用户不存在，创建');
-                    event(new WechatScanLogin($openid));
+                    event(new WechatScanLogin($EventKey,$openid));
                     return '扫码成功';
                 }
             } else {

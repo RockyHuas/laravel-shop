@@ -20,11 +20,15 @@ class WeChatController extends Controller
      * 生成扫描二维码
      * @return \Illuminate\Http\JsonResponse
      */
-    public function scanUrl()
+    public function scanUrl(ApiRequest $request)
     {
+        [$key] = $request->fields([$this,
+            'key',
+        ], true);
+
         $wechat = app('wechat.official_account');
 
-        $result = $wechat->qrcode->temporary('foo', 600);
+        $result = $wechat->qrcode->temporary($key);
         $qrcodeUrl = $wechat->qrcode->url($result['ticket']);
 
         return ok($qrcodeUrl);

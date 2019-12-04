@@ -16,14 +16,16 @@ class WechatScanLogin implements ShouldBroadcast
 
     public $token;
     public $open_id;
+    public $event_key;
 
     /**
      * Create a new event instance.
      *
      * @param $token
      */
-    public function __construct($open_id, $token = '')
+    public function __construct($event_key,$open_id, $token = '')
     {
+        $this->event_key = $event_key;
         $this->open_id = $open_id;
         $this->token = $token;
     }
