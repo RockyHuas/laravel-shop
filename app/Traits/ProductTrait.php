@@ -16,7 +16,8 @@ trait ProductTrait
         return Product::City()
             ->where('is_rec', 1)
             ->where('on_sale',1)
-            ->orderBy('sort', 'ASC')->get(['id','title','price','category_id','image','app_image']);
+            ->where('stock','>',0)
+            ->orderBy('sort', 'ASC')->get();
     }
 
     /**
@@ -28,7 +29,8 @@ trait ProductTrait
         return Product::City()
             ->where('is_hot', 1)
             ->where('on_sale',1)
-            ->orderBy('sort', 'ASC')->get(['id','title','price','category_id','image','app_image']);
+            ->where('stock','>',0)
+            ->orderBy('sort', 'ASC')->get();
     }
 
     /**
@@ -40,6 +42,7 @@ trait ProductTrait
     {
         return Product::City()->with('brand')
             ->where('on_sale',1)
+            ->where('stock','>',0)
             ->when($category_id, function ($query, $value) {
                 $query->whereCategoryId($value);
             })->get()
@@ -58,6 +61,7 @@ trait ProductTrait
     {
         return Product::City()
             ->where('on_sale',1)
+            ->where('stock','>',0)
             ->when($category_id, function ($query, $value) {
                 $query->whereCategoryId($value);
             })->when($brand_id, function ($query, $value) {
@@ -83,6 +87,7 @@ trait ProductTrait
     {
         return Product::City()
             ->where('on_sale',1)
+            ->where('stock','>',0)
             ->when($keywords, function ($query, $value) {
                 $query->where('search_title', 'like', "%".
                     trim(str_replace(' ', '', $value))."%");
@@ -96,7 +101,7 @@ trait ProductTrait
             })->when($max_price, function ($query, $value) {
                 $query->where('price', '<=', $value);
             })->orderBy($sort == 0 ? 'id' : ($sort == 1 ? 'price' : 'sold_count'), $sort_order)
-            ->paginate($size,['id','title','price','category_id']);
+            ->paginate($size);
     }
 
 }
