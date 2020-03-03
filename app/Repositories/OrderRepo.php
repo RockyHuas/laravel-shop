@@ -27,9 +27,11 @@ class OrderRepo
         return \DB::transaction(function () use ($user_address_id, $products, $total_amount, $note) {
 
             $products = collect($products)->map(function ($item) {
+                
                 $product = Product::whereKey($item['product_id'])
                     ->where('on_sale', 1)->first();
                 throw_on(!$product, '产品已下架');
+                throw_on($product->stock < $item['amount'],'产品库存不足');
                 $product->total_amount = $item['amount'];
                 $product->total_price = $product->price * $item['amount'];
                 return $product;
@@ -66,6 +68,9 @@ class OrderRepo
                     'price' => $item->price,
                     'order_id' => $order->id
                 ]);
+
+                // 减少库存
+                $item->decrement('stock',$item->total_amount);
             });
 
             return $order;
