@@ -63,7 +63,7 @@
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover"
         ],
-        
+
         "post-optimize": [
             "@php artisan clear-compiled",
             "@php artisan config:cache",
