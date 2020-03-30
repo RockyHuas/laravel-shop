@@ -1,5 +1,5 @@
 {
-	"authHost": "http://local.shop.com",
+	"authHost": "http://admin.51lanxun.com",
 	"authEndpoint": "/broadcasting/auth",
 	"clients": [],
 	"database": "redis",
