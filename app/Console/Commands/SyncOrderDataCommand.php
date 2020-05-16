@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Events\OrderShipped;
+use Illuminate\Console\Command;
 use App\Models\Order;
 
 class SyncOrderDataCommand extends Command
