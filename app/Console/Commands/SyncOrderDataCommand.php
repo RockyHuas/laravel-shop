@@ -32,7 +32,7 @@ class SyncOrderDataCommand extends Command
         $this->info('开始同步订单数据');
         Order::with('items.product')->chunk(2000,function($orders){
             $orders->each(function($order){
-                $order->order_items->each(function($order_item){
+                $order->items->each(function($order_item){
                     $product=$order_item->product;
                     $order_item->update([
                         'protuct_title'=>data_get($product,'title'),
