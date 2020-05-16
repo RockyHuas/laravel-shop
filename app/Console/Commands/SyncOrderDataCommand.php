@@ -41,5 +41,6 @@ class SyncOrderDataCommand extends Command
                 });
             });
         });
+        $this->info('结束同步订单数据');
     }
 }
