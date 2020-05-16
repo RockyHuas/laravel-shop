@@ -35,7 +35,7 @@ class SyncOrderDataCommand extends Command
                 $order->items->each(function($order_item){
                     $product=$order_item->product;
                     $order_item->update([
-                        'protuct_title'=>data_get($product,'title'),
+                        'product_title'=>data_get($product,'title'),
                         'product_sku_id'=>0
                     ]);
                 });
