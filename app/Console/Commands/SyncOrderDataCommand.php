@@ -30,7 +30,7 @@ class SyncOrderDataCommand extends Command
     public function handle()
     {
         $this->info('开始同步订单数据');
-        Order::with('order_items.product')->chunk(2000,function($orders){
+        Order::with('items.product')->chunk(2000,function($orders){
             $orders->each(function($order){
                 $order->order_items->each(function($order_item){
                     $product=$order_item->product;
